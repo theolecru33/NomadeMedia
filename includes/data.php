@@ -1,9 +1,20 @@
 <?php
 /**
- * Data source for Nomade Media — events and spots.
- * Replace by a DB or admin back-office later.
+ * Data source for Nomade Media — events, spots, community.
+ * Photos: Pexels (real Bassin d'Arcachon photos) + Unsplash fallbacks.
  */
 
+// ===== EVENT CATEGORIES =====
+$event_categories = [
+    'concert'    => ['label' => 'Concert',    'emoji' => '🎤', 'color' => '#E77B4C'],
+    'dj-set'     => ['label' => 'DJ Set',     'emoji' => '🎧', 'color' => '#8BA0C8'],
+    'festival'   => ['label' => 'Festival',   'emoji' => '🎪', 'color' => '#D88FB5'],
+    'sport'      => ['label' => 'Sport',      'emoji' => '🏃', 'color' => '#6B8E78'],
+    'tradition'  => ['label' => 'Tradition',  'emoji' => '⚓', 'color' => '#3E4E6E'],
+    'marche'     => ['label' => 'Marché',     'emoji' => '🛍️', 'color' => '#C7965D'],
+];
+
+// ===== EVENTS =====
 $events = [
     [
         'id' => 'escapades-musicales-2026',
@@ -11,25 +22,35 @@ $events = [
         'date' => '2026-06-18',
         'date_end' => '2026-07-18',
         'date_label' => '18 juin → 18 juillet',
+        'time' => '20h30',
         'location' => 'Tout le bassin',
-        'category' => 'Festival',
-        'tag' => 'Musique classique',
+        'location_tag' => 'BASSIN D\'ARCACHON',
+        'category' => 'festival',
+        'tags' => ['Musique classique', 'International'],
         'price' => 'Gratuit - 18 ans',
-        'image' => 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1200&auto=format&fit=crop',
+        'price_full' => 'De 12€ à 35€ · Gratuit -18 ans',
+        'image' => 'https://images.pexels.com/photos/19362300/pexels-photo-19362300.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Festival international de musique classique dans les plus beaux lieux du bassin. Un mois de concerts d\'exception au cœur du patrimoine arcachonnais.',
+        'long_description' => 'Pendant un mois, les plus grandes salles et lieux patrimoniaux du Bassin s\'ouvrent aux orchestres venus du monde entier. Concerts en plein air, récitals intimistes, surprises symphoniques — un programme exigeant et accessible, avec la gratuité totale pour les moins de 18 ans.',
+        'url' => 'https://www.lesescapadesmusicales.com/',
         'highlight' => true,
     ],
     [
         'id' => 'suzane-velodrome',
-        'title' => 'Suzane en concert',
+        'title' => 'Suzane — Arcachon en Scène',
         'date' => '2026-08-03',
         'date_label' => '3 août 2026',
+        'time' => '21h00',
         'location' => 'Vélodrome d\'Arcachon',
-        'category' => 'Concert',
-        'tag' => 'Électro-pop',
+        'location_tag' => 'ARCACHON',
+        'category' => 'concert',
+        'tags' => ['Électro-pop', 'Français'],
         'price' => '35€',
+        'price_full' => 'Placement libre · 35€',
         'image' => 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop',
         'description' => 'La chanteuse Suzane embrase le Vélodrome pour une soirée Arcachon en Scène sous les étoiles.',
+        'long_description' => 'Un des moments forts de l\'été 2026 sur le Bassin. Suzane, sa pop électro engagée et ses mises en scène visuelles, pour une soirée à ciel ouvert au Vélodrome. Ouverture des portes à 19h30, première partie à 20h30.',
+        'url' => '#',
         'highlight' => true,
     ],
     [
@@ -37,12 +58,17 @@ $events = [
         'title' => 'Mika — Arcachon en Scène',
         'date' => '2026-08-04',
         'date_label' => '4 août 2026',
+        'time' => '21h00',
         'location' => 'Vélodrome d\'Arcachon',
-        'category' => 'Concert',
-        'tag' => 'Pop internationale',
+        'location_tag' => 'ARCACHON',
+        'category' => 'concert',
+        'tags' => ['Pop internationale', 'Live band'],
         'price' => '49€',
+        'price_full' => 'Fosse 49€ · Gradin 59€',
         'image' => 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200&auto=format&fit=crop',
         'description' => 'Mika revient en France pour une soirée explosive face au bassin. Un des temps forts de l\'été 2026.',
+        'long_description' => 'Mika pose ses valises au Vélodrome pour une nuit unique sur le bassin. Les tubes, le live band, la fête. Un concert à ne pas rater.',
+        'url' => '#',
         'highlight' => true,
     ],
     [
@@ -51,12 +77,17 @@ $events = [
         'date' => '2026-08-14',
         'date_end' => '2026-08-15',
         'date_label' => '14 & 15 août',
+        'time' => 'Toute la journée',
         'location' => 'Front de mer d\'Arcachon',
-        'category' => 'Tradition',
-        'tag' => 'Gratuit',
+        'location_tag' => 'ARCACHON',
+        'category' => 'tradition',
+        'tags' => ['Gratuit', 'Familial', 'Patrimoine'],
         'price' => 'Gratuit',
-        'image' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop',
+        'price_full' => 'Entrée libre',
+        'image' => 'https://images.pexels.com/photos/13678581/pexels-photo-13678581.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Pique-nique géant, défilé nautique, traditions et animations. Le plus gros rassemblement populaire de l\'été.',
+        'long_description' => 'Deux jours de fête sur le front de mer : pique-nique géant le 14 au soir, grand défilé nautique de pinasses, bénédiction de la mer, concerts, feu d\'artifice. Le rassemblement culte de l\'été.',
+        'url' => '#',
         'highlight' => false,
     ],
     [
@@ -65,25 +96,35 @@ $events = [
         'date' => '2026-09-29',
         'date_end' => '2026-10-04',
         'date_label' => '29 sept → 4 oct',
+        'time' => 'Soirs & dimanches',
         'location' => 'Théâtre Olympia & Théâtre de la Mer',
-        'category' => 'Festival',
-        'tag' => 'Danse',
+        'location_tag' => 'ARCACHON',
+        'category' => 'festival',
+        'tags' => ['Danse', 'Contemporain', 'Théâtre'],
         'price' => 'Dès 12€',
+        'price_full' => 'Tarifs de 12€ à 28€',
         'image' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=1200&auto=format&fit=crop',
         'description' => 'La danse sous toutes ses formes envahit Arcachon : spectacles en salle, sur la plage et dans la rue.',
+        'long_description' => 'Une semaine de danse à Arcachon : compagnies nationales et internationales, pièces intimes et grands formats, performances en extérieur sur la plage et dans les rues. Un festival exigeant, accessible à tous.',
+        'url' => '#',
         'highlight' => false,
     ],
     [
         'id' => 'frappadingue-arcachon',
-        'title' => 'La Frappadingue revient',
+        'title' => 'La Frappadingue',
         'date' => '2026-05-03',
         'date_label' => '3 mai 2026',
+        'time' => 'Départs à partir de 9h',
         'location' => 'Plage d\'Arcachon',
-        'category' => 'Sport',
-        'tag' => 'Course à obstacles',
+        'location_tag' => 'ARCACHON',
+        'category' => 'sport',
+        'tags' => ['Course à obstacles', 'Ambiance', 'Plage'],
         'price' => 'Dès 29€',
+        'price_full' => '29€ - 49€ selon parcours',
         'image' => 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1200&auto=format&fit=crop',
         'description' => 'La course à obstacles XXL qui transforme la plage d\'Arcachon en terrain de jeu géant. Ambiance garantie.',
+        'long_description' => 'La Frappadingue débarque sur la plage d\'Arcachon : parcours de 6, 12 ou 18 km, obstacles XXL, boue, rires et déguisements. Pas besoin d\'être un champion — l\'ambiance fait tout.',
+        'url' => '#',
         'highlight' => true,
     ],
     [
@@ -91,29 +132,78 @@ $events = [
         'title' => 'Marché nocturne de La Teste',
         'date' => '2026-07-10',
         'date_end' => '2026-08-28',
-        'date_label' => 'Tous les vendredis soirs',
+        'date_label' => 'Tous les vendredis',
+        'time' => '18h → 23h',
         'location' => 'Port de La Teste-de-Buch',
-        'category' => 'Marché',
-        'tag' => 'Food & artisanat',
+        'location_tag' => 'LA TESTE',
+        'category' => 'marche',
+        'tags' => ['Food', 'Artisanat', 'Concert live'],
         'price' => 'Gratuit',
+        'price_full' => 'Entrée libre',
         'image' => 'https://images.unsplash.com/photo-1555529902-5261145633bf?w=1200&auto=format&fit=crop',
         'description' => 'Producteurs locaux, street food, artisans et concerts live. Le rendez-vous du vendredi soir de juillet à août.',
-        'highlight' => false,
+        'long_description' => 'Tous les vendredis soirs de l\'été, le port de La Teste s\'anime : producteurs, artisans, food trucks et concert live dès 20h. Le spot pour finir la semaine les pieds dans l\'eau.',
+        'url' => '#',
+        'highlight' => true,
     ],
     [
         'id' => 'regate-pinasses',
         'title' => 'Régate des Pinasses',
         'date' => '2026-07-19',
         'date_label' => '19 juillet 2026',
+        'time' => '14h → 19h',
         'location' => 'Bassin d\'Arcachon',
-        'category' => 'Tradition',
-        'tag' => 'Nautisme',
+        'location_tag' => 'BASSIN',
+        'category' => 'tradition',
+        'tags' => ['Nautisme', 'Patrimoine', 'Gratuit'],
         'price' => 'Gratuit',
-        'image' => 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&auto=format&fit=crop',
+        'price_full' => 'Spectacle gratuit depuis la côte',
+        'image' => 'https://images.pexels.com/photos/11001469/pexels-photo-11001469.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Les bateaux traditionnels du bassin s\'affrontent sous voile. Un spectacle inscrit au patrimoine du bassin.',
+        'long_description' => 'Les pinasses, bateaux traditionnels du bassin, s\'affrontent sur un parcours chronométré. Spectacle visible depuis toutes les plages d\'Arcachon et du Pyla. Gratuit pour les spectateurs.',
+        'url' => '#',
         'highlight' => false,
     ],
+    [
+        'id' => 'dj-set-domaine-ferret',
+        'title' => 'DJ Set au Domaine du Ferret',
+        'date' => '2026-07-24',
+        'date_label' => 'Vendredi 24 juillet',
+        'time' => '19h → 01h',
+        'location' => 'Domaine du Ferret, Claouey',
+        'location_tag' => 'CAP FERRET',
+        'category' => 'dj-set',
+        'tags' => ['House', 'Rooftop', 'Sunset'],
+        'price' => 'Entrée 10€',
+        'price_full' => 'Entrée 10€ avec conso',
+        'image' => 'https://images.pexels.com/photos/8817296/pexels-photo-8817296.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
+        'description' => 'Coucher de soleil face au bassin, house music, cocktails. Le sunset idéal du Cap.',
+        'long_description' => 'Rendez-vous au Domaine du Ferret pour un DJ set sunset face au bassin. Deux artistes locaux aux platines, cocktails signature et vue carte postale.',
+        'url' => '#',
+        'highlight' => true,
+    ],
+    [
+        'id' => 'soiree-white-garden',
+        'title' => 'Soirée dansante au White Garden',
+        'date' => '2026-07-26',
+        'date_label' => 'Dimanche 26 juillet',
+        'time' => '20h → 02h',
+        'location' => 'White Garden, Port de La Vigne',
+        'location_tag' => 'CAP FERRET',
+        'category' => 'dj-set',
+        'tags' => ['Dancefloor', 'Club', 'Terrasse'],
+        'price' => 'Gratuit avant 23h',
+        'price_full' => 'Gratuit avant 23h · 15€ après',
+        'image' => 'https://images.pexels.com/photos/2531184/pexels-photo-2531184.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
+        'description' => 'Le dimanche soir se danse au White Garden. Terrasse, dancefloor et DJs live.',
+        'long_description' => 'Le White Garden transforme son dimanche soir en soirée dansante : DJs live, terrasse face au bassin, dancefloor. Entrée gratuite avant 23h.',
+        'url' => '#',
+        'highlight' => true,
+    ],
 ];
+
+// ===== SPOT TAGS POOL =====
+// (Just reference — free-form on each spot)
 
 $spots = [
     // RESTOS
@@ -123,11 +213,15 @@ $spots = [
         'category' => 'resto',
         'category_label' => 'Resto',
         'location' => 'Cap Ferret',
-        'tag' => 'Institution',
+        'tags' => ['Institution', 'Moules-frites', 'Terrasse', 'Vue Dune'],
         'price_level' => '€€€',
-        'image' => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/32506944/pexels-photo-32506944.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Institution du Cap Ferret depuis 4 générations. Terrasse face à la Dune du Pilat, moules-frites mythiques.',
+        'long_description' => 'Chez Hortense, c\'est l\'institution. Quatre générations, une terrasse face à la Dune, une carte simple mais parfaite. On y va pour les moules-frites, on y reste pour la vue et l\'ambiance familiale. Réservation indispensable en été.',
+        'address' => '26 Av. du Sémaphore, 33970 Lège-Cap-Ferret',
+        'phone' => '05 56 60 62 56',
         'instagram' => 'https://www.instagram.com/chezhortense/',
+        'sponsored' => false,
     ],
     [
         'id' => 'cabane-mimbeau',
@@ -135,11 +229,15 @@ $spots = [
         'category' => 'resto',
         'category_label' => 'Resto',
         'location' => 'Cap Ferret',
-        'tag' => 'Huîtres',
+        'tags' => ['Huîtres', 'Dégustation', 'Panorama', 'Ostréiculteur'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/34178396/pexels-photo-34178396.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Terrasse panoramique sur la conche du Mimbeau, les meilleures huîtres du bassin loin de l\'agitation du village.',
+        'long_description' => 'Loin des terrasses bondées du village, la Cabane du Mimbeau propose une dégustation d\'huîtres directement face à la conche. L\'ostréiculteur produit sur place, la terrasse en bois invite à la contemplation.',
+        'address' => 'Conche du Mimbeau, 33970 Lège-Cap-Ferret',
+        'phone' => '05 56 60 50 50',
         'instagram' => '#',
+        'sponsored' => true,
     ],
     [
         'id' => 'le-sail-fish',
@@ -147,11 +245,15 @@ $spots = [
         'category' => 'resto',
         'category_label' => 'Resto',
         'location' => 'Lège-Cap-Ferret',
-        'tag' => 'DJ & dîner',
+        'tags' => ['DJ & dîner', 'Poisson', 'Dancefloor', 'Été'],
         'price_level' => '€€€',
-        'image' => 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/5555878/pexels-photo-5555878.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Poissons, viandes grillées, cocktails, puis DJ et piste de danse. La soirée commence à table.',
+        'long_description' => 'Le Sail Fish fait le grand écart entre table gastro et club. Dîner fin, cocktails pointus, puis DJ set à partir de 23h et piste de danse. Le spot hybride du Cap.',
+        'address' => 'Lège-Cap-Ferret',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'bon-endroit-teste',
@@ -159,11 +261,15 @@ $spots = [
         'category' => 'resto',
         'category_label' => 'Resto',
         'location' => 'La Teste-de-Buch',
-        'tag' => 'Brunch',
+        'tags' => ['Brunch', 'Concept store', 'Bohème', 'Local'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/1660918/pexels-photo-1660918.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Concept store / café / cantine : brunch le dimanche, ambiance déco bohème et produits locaux.',
+        'long_description' => 'Bon Endroit, c\'est le lieu hybride qui manquait à La Teste : café, cantine, concept store. Brunch le dimanche (réservation conseillée), déco bohème, carte courte et fraîche avec des produits du bassin.',
+        'address' => 'Centre-ville, La Teste-de-Buch',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     // BARS
     [
@@ -172,11 +278,15 @@ $spots = [
         'category' => 'bar',
         'category_label' => 'Bar',
         'location' => 'Cap Ferret',
-        'tag' => 'Cocktails XXL',
+        'tags' => ['Cocktails XXL', 'À partager', 'Terrasse', 'Sunset'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/2531184/pexels-photo-2531184.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Les cocktails XXL à partager entre potes. Spot incontournable des étés au Cap.',
+        'long_description' => 'La Madrague a inventé le cocktail XXL : des créations à partager en bande, avec paille géante. Ambiance décontractée, terrasse côté bassin, DJ sets certains soirs.',
+        'address' => 'Village du Cap, Lège-Cap-Ferret',
+        'phone' => '',
         'instagram' => 'https://www.instagram.com/la_madrague_ferret/',
+        'sponsored' => true,
     ],
     [
         'id' => 'paris-pyla',
@@ -184,11 +294,15 @@ $spots = [
         'category' => 'bar',
         'category_label' => 'Bar',
         'location' => 'Le Moulleau',
-        'tag' => 'Légendaire',
+        'tags' => ['Légendaire', 'Chic', 'Zone piétonne', 'Tapas'],
         'price_level' => '€€€',
-        'image' => 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/8817296/pexels-photo-8817296.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Le bar mythique du Moulleau de retour. Au cœur de la zone piétonne, pour voir et être vu.',
+        'long_description' => 'Le Paris Pyla est de retour dans la zone piétonne du Moulleau. Cocktails pointus, tapas, ambiance qui monte crescendo. Le lieu où la journée finit souvent en soirée.',
+        'address' => 'Le Moulleau, Arcachon',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'la-guitoune',
@@ -196,11 +310,15 @@ $spots = [
         'category' => 'bar',
         'category_label' => 'Bar',
         'location' => 'Pyla-sur-Mer',
-        'tag' => 'Summer vibes',
+        'tags' => ['Summer vibes', 'Apéro', 'Convivial', 'Tard'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/8250764/pexels-photo-8250764.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Ambiance conviviale, good vibes et soirées d\'été qui durent tard. Le spot à apéro du Pyla.',
+        'long_description' => 'La Guitoune, c\'est l\'apéro qui s\'étire jusqu\'à très tard. Good vibes, staff de vieux routiers de la nuit du bassin, musique forte et conviviale.',
+        'address' => 'Pyla-sur-Mer',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'chez-fernande',
@@ -208,11 +326,15 @@ $spots = [
         'category' => 'bar',
         'category_label' => 'Bar',
         'location' => 'Arcachon',
-        'tag' => 'Cocktails',
+        'tags' => ['Cocktails', 'Maison', 'Sunset', 'Créations'],
         'price_level' => '€€',
         'image' => 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=1200&auto=format&fit=crop',
         'description' => 'Les meilleurs cocktails du Sud-Ouest : créations maison, ingrédients frais, ambiance coucher de soleil.',
+        'long_description' => 'Chez Fernande, chaque cocktail est une création maison avec des ingrédients frais et locaux. Ambiance feutrée, coucher de soleil garanti depuis la terrasse.',
+        'address' => 'Arcachon',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     // PLAGES
     [
@@ -221,11 +343,15 @@ $spots = [
         'category' => 'plage',
         'category_label' => 'Plage',
         'location' => 'La Teste-de-Buch',
-        'tag' => 'Iconique',
+        'tags' => ['Iconique', 'Sunset', 'Randonnée', 'Panorama'],
         'price_level' => '€',
-        'image' => 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/22735929/pexels-photo-22735929.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'La plus haute dune d\'Europe. Coucher de soleil obligatoire au moins une fois dans ta vie.',
+        'long_description' => 'La Dune du Pilat culmine à 106 mètres. La montée fait mal aux mollets, mais la vue sur le bassin, le banc d\'Arguin et l\'océan est inoubliable. Arrive au moins 1h avant le coucher du soleil.',
+        'address' => '33115 La Teste-de-Buch',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'plage-pereire',
@@ -233,11 +359,15 @@ $spots = [
         'category' => 'plage',
         'category_label' => 'Plage',
         'location' => 'Arcachon',
-        'tag' => 'Pins & bassin',
+        'tags' => ['Pins', 'Vue bassin', 'Famille', 'Journée'],
         'price_level' => 'Gratuit',
-        'image' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/9722071/pexels-photo-9722071.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Sable fin, pinède en arrière-plan et vue imprenable sur le bassin. La plage parfaite pour la journée.',
+        'long_description' => 'La plage Pereire est l\'une des plus agréables d\'Arcachon : sable fin, pinède en arrière-plan, vue directe sur le bassin. Parfaite pour une journée en famille, restaurants à proximité.',
+        'address' => 'Avenue du Parc Pereire, 33120 Arcachon',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'plage-lagune',
@@ -245,11 +375,15 @@ $spots = [
         'category' => 'plage',
         'category_label' => 'Plage',
         'location' => 'La Teste-de-Buch',
-        'tag' => 'Sauvage',
+        'tags' => ['Océan', 'Surf', 'Sauvage', 'Grande plage'],
         'price_level' => 'Gratuit',
-        'image' => 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/4081219/pexels-photo-4081219.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Plage océan au sud du Pilat, vagues et grands espaces. Le spot des surfeurs et des longues balades.',
+        'long_description' => 'Au sud de la Dune du Pilat, la plage de la Lagune s\'étire sur des kilomètres. Grande plage océane, vagues correctes pour le surf, ambiance sauvage. Parking gratuit à 15 min à pied.',
+        'address' => '33260 La Teste-de-Buch',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'grand-crohot',
@@ -257,11 +391,15 @@ $spots = [
         'category' => 'plage',
         'category_label' => 'Plage',
         'location' => 'Lège-Cap-Ferret',
-        'tag' => 'Océan',
+        'tags' => ['Océan', 'Forêt', 'Sunset', 'Sauvage'],
         'price_level' => 'Gratuit',
-        'image' => 'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/9729432/pexels-photo-9729432.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Océan, forêt de pins et coucher de soleil côté ouest. Une des plus belles plages sauvages du coin.',
+        'long_description' => 'Le Grand Crohot, c\'est l\'océan brut côté Cap Ferret : forêt de pins, dunes, vagues, ambiance sauvage. Un des plus beaux couchers de soleil de la côte atlantique.',
+        'address' => 'Route du Grand Crohot, 33950 Lège-Cap-Ferret',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     // ACTIVITÉS
     [
@@ -270,11 +408,15 @@ $spots = [
         'category' => 'activite',
         'category_label' => 'Activité',
         'location' => 'Bassin d\'Arcachon',
-        'tag' => 'Pinasse',
+        'tags' => ['Pinasse', 'Cabanes tchanquées', 'Iconique', 'Balade'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/13492229/pexels-photo-13492229.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Balade en pinasse autour des célèbres cabanes tchanquées. Le symbole du bassin.',
+        'long_description' => 'L\'Île aux Oiseaux et ses deux cabanes tchanquées sur pilotis, c\'est le symbole du Bassin. Balades en pinasse depuis Arcachon, La Teste ou Le Cap Ferret, 2 à 3h sur l\'eau.',
+        'address' => 'Bassin d\'Arcachon',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'banc-arguin',
@@ -282,23 +424,31 @@ $spots = [
         'category' => 'activite',
         'category_label' => 'Activité',
         'location' => 'Bassin d\'Arcachon',
-        'tag' => 'Bateau',
+        'tags' => ['Bateau', 'Eau turquoise', 'Pique-nique', 'Marée'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/13678581/pexels-photo-13678581.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Le banc de sable qui change de forme avec les marées. Pique-nique les pieds dans l\'eau turquoise.',
+        'long_description' => 'Le Banc d\'Arguin est une réserve naturelle : banc de sable qui apparaît à marée basse face à la Dune du Pilat. Eau turquoise, oiseaux, pique-nique mémorable. Accès en bateau uniquement.',
+        'address' => 'Bassin d\'Arcachon',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => true,
     ],
     [
-        'id' => 'surf-lacanau',
+        'id' => 'surf-porge',
         'name' => 'Surf au Porge',
         'category' => 'activite',
         'category_label' => 'Activité',
         'location' => 'Le Porge',
-        'tag' => 'Surf',
+        'tags' => ['Surf', 'École', 'Tous niveaux', 'Vagues'],
         'price_level' => '€€',
-        'image' => 'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/11059786/pexels-photo-11059786.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Session surf ou école pour débuter. Des vagues pour tous les niveaux, sans la foule de Lacanau.',
+        'long_description' => 'Le Porge est la plage surf à 30 min du bassin. Vagues adaptées aux débutants comme aux confirmés, plusieurs écoles locales, ambiance plus tranquille que Lacanau.',
+        'address' => '33680 Le Porge',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
     [
         'id' => 'parapente-pilat',
@@ -306,61 +456,73 @@ $spots = [
         'category' => 'activite',
         'category_label' => 'Activité',
         'location' => 'Dune du Pilat',
-        'tag' => 'Sensations',
+        'tags' => ['Sensations', 'Vue aérienne', 'Biplace', 'Expérience'],
         'price_level' => '€€€',
-        'image' => 'https://images.unsplash.com/photo-1601024445121-e5b82f020549?w=1200&auto=format&fit=crop',
+        'image' => 'https://images.pexels.com/photos/13722036/pexels-photo-13722036.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Décoller du haut de la Dune du Pilat, survoler la forêt et le bassin. L\'expérience ultime.',
+        'long_description' => 'Décoller du sommet de la plus haute dune d\'Europe, survoler la forêt des Landes et le Bassin d\'Arcachon. Baptêmes biplace avec moniteur diplômé, 20 à 30 min de vol.',
+        'address' => 'Dune du Pilat, 33115 La Teste-de-Buch',
+        'phone' => '',
         'instagram' => '#',
+        'sponsored' => false,
     ],
 ];
 
+// ===== COMMUNITY GROUPS =====
 $community_groups = [
     [
         'name' => 'Bons plans Bassin',
         'description' => 'Le groupe pour repérer les meilleurs bons plans, restos et événements du week-end.',
         'members' => '420+',
         'emoji' => '🌅',
-        'url' => '#',
+        'color' => '#FF9A6B',
+        'url' => 'https://chat.whatsapp.com/placeholder1',
     ],
     [
         'name' => 'Sorties Arcachon 18-30',
         'description' => 'Soirées, afterwork, rencontres. Pour les jeunes du bassin qui veulent bouger.',
         'members' => '180+',
         'emoji' => '🍹',
-        'url' => '#',
+        'color' => '#D88FB5',
+        'url' => 'https://chat.whatsapp.com/placeholder2',
     ],
     [
         'name' => 'Surf & océan',
         'description' => 'Sessions surf, covoiturage vers Le Porge et Lacanau, bulletins météo entre passionnés.',
         'members' => '95+',
         'emoji' => '🏄',
-        'url' => '#',
+        'color' => '#8BA0C8',
+        'url' => 'https://chat.whatsapp.com/placeholder3',
     ],
     [
         'name' => 'Food du Bassin',
         'description' => 'On partage les nouvelles tables, cabanes à huîtres et adresses à tester.',
         'members' => '260+',
         'emoji' => '🦪',
-        'url' => '#',
+        'color' => '#6B8E78',
+        'url' => 'https://chat.whatsapp.com/placeholder4',
     ],
     [
         'name' => 'Familles du Bassin',
         'description' => 'Activités enfants, sorties familiales, bons plans week-end.',
         'members' => '310+',
         'emoji' => '👨‍👩‍👧',
-        'url' => '#',
+        'color' => '#C7965D',
+        'url' => 'https://chat.whatsapp.com/placeholder5',
     ],
     [
         'name' => 'Concerts & festivals',
         'description' => 'Billetterie, covoiturage, alertes annulations : on ne rate plus une date.',
         'members' => '145+',
         'emoji' => '🎶',
-        'url' => '#',
+        'color' => '#3E4E6E',
+        'url' => 'https://chat.whatsapp.com/placeholder6',
     ],
 ];
 
-function get_weekend_events($events, $limit = 3) {
-    $today = new DateTime();
+// ===== HELPERS =====
+
+function get_weekend_events($events, $limit = 4) {
     $highlighted = array_filter($events, fn($e) => !empty($e['highlight']));
     usort($highlighted, fn($a, $b) => strcmp($a['date'], $b['date']));
     return array_slice($highlighted, 0, $limit);
@@ -370,7 +532,41 @@ function get_spots_by_category($spots, $category) {
     return array_values(array_filter($spots, fn($s) => $s['category'] === $category));
 }
 
+function get_sponsored_spots($spots) {
+    return array_values(array_filter($spots, fn($s) => !empty($s['sponsored'])));
+}
+
+function get_events_by_category($events, $category) {
+    return array_values(array_filter($events, fn($e) => $e['category'] === $category));
+}
+
+function find_event($events, $id) {
+    foreach ($events as $e) if ($e['id'] === $id) return $e;
+    return null;
+}
+
+function find_spot($spots, $id) {
+    foreach ($spots as $s) if ($s['id'] === $id) return $s;
+    return null;
+}
+
 function strftime_fr($month_num) {
     $months = [1=>'Jan',2=>'Fév',3=>'Mar',4=>'Avr',5=>'Mai',6=>'Juin',7=>'Juil',8=>'Août',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Déc'];
     return $months[(int)$month_num] ?? '';
+}
+
+// Fake but plausible tide/weather data for the top bar.
+function get_tide_info() {
+    $hour = (int)date('G');
+    $tides = [
+        ['dir' => 'montante',   'type' => 'pleine mer', 'time' => '09h42'],
+        ['dir' => 'descendante', 'type' => 'basse mer',  'time' => '16h07'],
+        ['dir' => 'montante',   'type' => 'pleine mer', 'time' => '22h18'],
+    ];
+    $idx = $hour < 12 ? 0 : ($hour < 18 ? 1 : 2);
+    return array_merge($tides[$idx], ['coeff' => 77]);
+}
+
+function get_weather_info() {
+    return ['temp' => 21, 'wind_dir' => 'SE', 'wind_speed' => 7];
 }

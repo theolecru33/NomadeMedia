@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Reveal on scroll (IntersectionObserver)
+    // Reveal on scroll
     const revealEls = document.querySelectorAll('.reveal');
     if (revealEls.length) {
         const io = new IntersectionObserver((entries) => {
@@ -36,29 +36,26 @@ document.addEventListener('DOMContentLoaded', () => {
         revealEls.forEach(el => io.observe(el));
     }
 
-    // Category tabs (spots filter on homepage & spots page)
-    const tabs = document.querySelectorAll('.category-tab');
-    const grid = document.querySelector('[data-spot-grid]');
-    if (tabs.length && grid) {
+    // Spot category tabs
+    const tabs = document.querySelectorAll('.category-tab[data-category]');
+    const spotGrid = document.querySelector('[data-spot-grid]');
+    if (tabs.length && spotGrid) {
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const cat = tab.dataset.category;
                 tabs.forEach(t => t.classList.toggle('active', t === tab));
-
-                const cards = grid.querySelectorAll('[data-spot-category]');
+                const cards = spotGrid.querySelectorAll('[data-spot-category]');
                 let visible = 0;
                 cards.forEach(card => {
                     const match = cat === 'all' || card.dataset.spotCategory === cat;
                     card.style.display = match ? '' : 'none';
                     if (match) visible++;
                 });
-
-                const empty = grid.querySelector('.spot-empty');
+                const empty = spotGrid.querySelector('.spot-empty');
                 if (empty) empty.style.display = visible === 0 ? '' : 'none';
             });
         });
 
-        // Preselect from URL ?cat=
         const urlCat = new URLSearchParams(window.location.search).get('cat');
         if (urlCat) {
             const preset = document.querySelector(`.category-tab[data-category="${urlCat}"]`);
@@ -66,28 +63,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event cards: expand detail on click (toggle)
-    document.querySelectorAll('.event-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            // if clicking an inner link, let it happen
-            if (e.target.closest('a, button')) return;
-            card.classList.toggle('expanded');
-        });
-    });
-
-    // Parallax subtle on hero visual
-    const heroVisual = document.querySelector('.hero-visual');
-    if (heroVisual && window.matchMedia('(min-width: 960px)').matches) {
-        const cards = heroVisual.querySelectorAll('.hero-card');
-        heroVisual.addEventListener('mousemove', (e) => {
-            const rect = heroVisual.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            cards.forEach((c, i) => {
-                const depth = (i + 1) * 6;
-                c.style.transform = `${c.dataset.baseTransform || ''} translate(${x * depth}px, ${y * depth}px)`;
+    // Event category tabs
+    const eventTabs = document.querySelectorAll('.category-tab[data-event-category]');
+    const eventGrid = document.querySelector('[data-event-grid]');
+    if (eventTabs.length && eventGrid) {
+        eventTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const cat = tab.dataset.eventCategory;
+                eventTabs.forEach(t => t.classList.toggle('active', t === tab));
+                const cards = eventGrid.querySelectorAll('[data-event-category]');
+                let visible = 0;
+                cards.forEach(card => {
+                    const match = cat === 'all' || card.dataset.eventCategory === cat;
+                    card.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+                const empty = eventGrid.querySelector('.event-empty');
+                if (empty) empty.style.display = visible === 0 ? '' : 'none';
             });
         });
-        cards.forEach(c => { c.dataset.baseTransform = getComputedStyle(c).transform === 'none' ? '' : getComputedStyle(c).transform; });
+
+        const urlCat = new URLSearchParams(window.location.search).get('cat');
+        if (urlCat) {
+            const preset = document.querySelector(`.category-tab[data-event-category="${urlCat}"]`);
+            if (preset) preset.click();
+        }
+    }
+
+    // Subtle parallax on polaroid grid
+    const polaroids = document.querySelectorAll('.polaroid');
+    if (polaroids.length && window.matchMedia('(hover: hover)').matches) {
+        polaroids.forEach(p => {
+            p.addEventListener('mouseenter', () => { p.style.setProperty('--hover-lift', '1'); });
+            p.addEventListener('mouseleave', () => { p.style.setProperty('--hover-lift', '0'); });
+        });
     }
 });

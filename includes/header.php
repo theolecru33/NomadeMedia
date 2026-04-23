@@ -13,6 +13,9 @@ $nav_items = [
     'spots' => ['label' => 'Spots', 'href' => 'spots.php'],
     'communaute' => ['label' => 'Communauté', 'href' => 'communaute.php'],
 ];
+
+$tide = get_tide_info();
+$weather = get_weather_info();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -34,6 +37,26 @@ $nav_items = [
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%238BA0C8'/%3E%3Ctext x='50' y='62' text-anchor='middle' font-family='Georgia' font-size='40' font-weight='700' fill='white'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body data-page="<?= htmlspecialchars($current_page) ?>">
+
+<div class="top-bar">
+    <div class="container top-bar-inner">
+        <div class="top-bar-items">
+            <span class="top-bar-item">
+                <span class="top-emoji">🌊</span>
+                Marée <strong><?= htmlspecialchars($tide['dir']) ?></strong> · <?= htmlspecialchars($tide['type']) ?> à <?= htmlspecialchars($tide['time']) ?>
+                <span class="top-sep">·</span> coeff <?= $tide['coeff'] ?>
+            </span>
+            <span class="top-bar-item">
+                <span class="top-emoji">☀️</span>
+                <strong><?= $weather['temp'] ?>°C</strong> · vent <?= htmlspecialchars($weather['wind_dir']) ?> <?= $weather['wind_speed'] ?> nœuds
+            </span>
+            <span class="top-bar-item top-bar-location">
+                📍 Arcachon · La Teste · Pyla · Cap Ferret
+            </span>
+        </div>
+        <span class="top-bar-date"><?= date('l j F Y', strtotime('today')) ?></span>
+    </div>
+</div>
 
 <header class="site-header" id="siteHeader">
     <div class="container nav-wrap">
