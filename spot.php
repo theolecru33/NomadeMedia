@@ -6,7 +6,7 @@ if (!$sp) {
     header('Location: spots.php');
     exit;
 }
-$page_title = $sp['name'] . ' — Nomade';
+$page_title = $sp['name'] . ' · Nomade';
 $page_desc = $sp['description'];
 $current_page = 'spots';
 

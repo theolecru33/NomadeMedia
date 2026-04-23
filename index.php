@@ -1,9 +1,12 @@
 <?php
 require __DIR__ . '/includes/data.php';
-$page_title = 'Nomade — Le média du Bassin d\'Arcachon';
+$page_title = 'Nomade · Le média du Bassin d\'Arcachon';
 $page_desc = 'Bons plans du week-end, événements, spots triés par catégorie. Le média qui fait vibrer le Bassin d\'Arcachon.';
 $current_page = 'accueil';
-$weekend = get_weekend_events($events, 4);
+$weekend = get_weekend_events($events, 8);
+$weekend_count = count($weekend);
+$upcoming = array_slice(array_filter($events, fn($e) => strtotime($e['date']) >= strtotime('today')), 0, 4);
+usort($upcoming, fn($a, $b) => strcmp($a['date'], $b['date']));
 $sponsored = get_sponsored_spots($spots);
 include __DIR__ . '/includes/header.php';
 ?>
@@ -66,16 +69,19 @@ include __DIR__ . '/includes/header.php';
             <h2>Où sortir <span class="scribble-circle">ce week-end<svg viewBox="0 0 300 60" preserveAspectRatio="none"><path d="M150 4 Q 290 6 288 30 T 150 56 Q 10 54 12 30 T 150 4" stroke="currentColor" stroke-width="3.4" fill="none" stroke-linecap="round"/></svg></span>&nbsp;?</h2>
             <p>Les meilleures sorties repérées par la team. Clique, tu sauras tout.</p>
         </div>
-        <div class="polaroid-grid">
+        <div class="polaroid-grid" data-count="<?= $weekend_count ?>">
             <?php foreach ($weekend as $i => $ev):
                 $d = new DateTime($ev['date']);
                 $day = $d->format('d');
                 $month = strtoupper(strftime_fr($d->format('n')));
                 $cat = $event_categories[$ev['category']] ?? null;
-                $rotations = ['-2.2deg','1.6deg','-1.1deg','2.4deg'];
-                $rot = $rotations[$i % 4];
+                $rotations = ['-3.2deg','2.4deg','-1.6deg','3.1deg','-2.4deg','1.2deg','-0.8deg','2.8deg'];
+                $rot = $rotations[$i % 8];
+                $offsets = [0, 18, -12, 22, -6, 14, -20, 10];
+                $offset = $offsets[$i % 8];
+                $feature = ($weekend_count >= 3 && $i === 0);
             ?>
-            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="polaroid reveal reveal-delay-<?= ($i % 4) + 1 ?>" style="--rot: <?= $rot ?>;">
+            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="polaroid reveal reveal-delay-<?= ($i % 4) + 1 ?><?= $feature ? ' polaroid-feature' : '' ?>" style="--rot: <?= $rot ?>; --offset: <?= $offset ?>px;">
                 <span class="polaroid-tape"></span>
                 <div class="polaroid-photo">
                     <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
@@ -96,12 +102,6 @@ include __DIR__ . '/includes/header.php';
                 </div>
             </a>
             <?php endforeach; ?>
-        </div>
-        <div style="text-align:center; margin-top:60px;" class="reveal">
-            <a href="evenements.php" class="btn btn-secondary">
-                Voir tous les événements
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
         </div>
     </div>
 </section>
@@ -163,6 +163,51 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<!-- AGENDA : prochains événements -->
+<?php if (!empty($upcoming)): ?>
+<section class="section events-preview-section">
+    <div class="container">
+        <div class="section-head center reveal">
+            <span class="label">L'agenda</span>
+            <h2>Les <span style="color:var(--sunset-deep);">prochains</span> rendez-vous</h2>
+            <p>Concerts, festivals, marchés, soirées. Ce qui bouge dans les prochains jours sur le Bassin.</p>
+        </div>
+        <div class="events-preview-grid">
+            <?php foreach ($upcoming as $i => $ev):
+                $d = new DateTime($ev['date']);
+                $day = $d->format('d');
+                $month = strtoupper(strftime_fr($d->format('n')));
+                $cat = $event_categories[$ev['category']] ?? null;
+            ?>
+            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-preview-card reveal reveal-delay-<?= ($i % 4) + 1 ?>">
+                <div class="event-preview-media">
+                    <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
+                    <div class="event-preview-date">
+                        <strong><?= $day ?></strong>
+                        <span><?= $month ?></span>
+                    </div>
+                    <?php if ($cat): ?>
+                    <span class="event-cat-pill" style="background: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                    <?php endif; ?>
+                </div>
+                <div class="event-preview-body">
+                    <span class="event-preview-meta">📍 <?= htmlspecialchars($ev['location_tag']) ?> · <?= htmlspecialchars($ev['time']) ?></span>
+                    <h3><?= htmlspecialchars($ev['title']) ?></h3>
+                    <p><?= htmlspecialchars($ev['description']) ?></p>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <div style="text-align:center; margin-top:48px;" class="reveal">
+            <a href="evenements.php" class="btn btn-sunset">
+                Tous les événements
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- INSTAGRAM STRIP (stats retirées) -->
 <section class="insta-strip">
     <div class="container insta-strip-inner">
@@ -199,7 +244,7 @@ include __DIR__ . '/includes/header.php';
             </a>
         </div>
         <div class="playlist-embed reveal reveal-delay-1">
-            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DWSpF87bP6JSF?utm_source=generator&theme=0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX0AMssoUKCz7?utm_source=generator&theme=0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
     </div>
 </section>

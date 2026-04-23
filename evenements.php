@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/includes/data.php';
-$page_title = 'Événements — Nomade';
+$page_title = 'Événements · Nomade';
 $page_desc = 'Tous les événements du Bassin d\'Arcachon : concerts, festivals, soirées, traditions. L\'agenda de l\'été et au-delà.';
 $current_page = 'evenements';
 usort($events, fn($a, $b) => strcmp($a['date'], $b['date']));
@@ -11,7 +11,7 @@ include __DIR__ . '/includes/header.php';
     <div class="container">
         <span class="label">L'agenda</span>
         <h1>Tous les <span style="color:var(--sunset-deep);">événements</span><br>du Bassin.</h1>
-        <p>Concerts, festivals, DJ sets, marchés nocturnes, traditions — la programmation complète, mise à jour par la team Nomade.</p>
+        <p>Concerts, festivals, DJ sets, marchés nocturnes, traditions. La programmation complète, mise à jour par la team Nomade.</p>
     </div>
 </section>
 

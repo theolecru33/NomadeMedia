@@ -6,7 +6,7 @@ if (!$ev) {
     header('Location: evenements.php');
     exit;
 }
-$page_title = $ev['title'] . ' — Nomade';
+$page_title = $ev['title'] . ' · Nomade';
 $page_desc = $ev['description'];
 $current_page = 'evenements';
 $cat = $event_categories[$ev['category']] ?? null;

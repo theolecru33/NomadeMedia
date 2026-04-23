@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/includes/data.php';
-$page_title = 'Spots — Nomade';
+$page_title = 'Spots · Nomade';
 $page_desc = 'Tous les spots du Bassin d\'Arcachon : restos, bars, plages, activités. Les meilleures adresses repérées par la team Nomade.';
 $current_page = 'spots';
 $sponsored = get_sponsored_spots($spots);
@@ -11,7 +11,7 @@ include __DIR__ . '/includes/header.php';
     <div class="container">
         <span class="label">Nos adresses</span>
         <h1>Tous les <span style="color:var(--sunset-deep);">spots</span><br>du Bassin.</h1>
-        <p>Restos, bars, plages, activités. On teste, on sélectionne, on te file les bonnes adresses — classées par envie.</p>
+        <p>Restos, bars, plages, activités. On teste, on sélectionne, on te file les bonnes adresses, classées par envie.</p>
     </div>
 </section>
 
@@ -21,7 +21,7 @@ include __DIR__ . '/includes/header.php';
         <div class="sponsor-head reveal">
             <span class="sponsor-label">★ Mise en avant</span>
             <h2>Nos partenaires du moment</h2>
-            <p>Des adresses qu'on aime, qui nous soutiennent — et qu'on te recommande les yeux fermés.</p>
+            <p>Des adresses qu'on aime, qui nous soutiennent, et qu'on te recommande les yeux fermés.</p>
         </div>
         <div class="sponsor-grid">
             <?php foreach ($sponsored as $i => $sp): ?>

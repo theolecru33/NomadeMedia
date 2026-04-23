@@ -3,7 +3,7 @@
  * Header shared across all pages.
  * Pages set $page_title, $page_desc, $current_page before including.
  */
-$page_title = $page_title ?? 'Nomade — Le média du Bassin d\'Arcachon';
+$page_title = $page_title ?? 'Nomade · Le média du Bassin d\'Arcachon';
 $page_desc = $page_desc ?? 'Bons plans, événements, spots et soirées du Bassin d\'Arcachon. Le média qui fait vibrer la région.';
 $current_page = $current_page ?? 'accueil';
 
@@ -44,17 +44,16 @@ $weather = get_weather_info();
             <span class="top-bar-item">
                 <svg class="top-wave" width="28" height="10" viewBox="0 0 60 10" aria-hidden="true"><path d="M0 5 Q 7.5 0 15 5 T 30 5 T 45 5 T 60 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                 Marée <strong><?= htmlspecialchars($tide['dir']) ?></strong> · <?= htmlspecialchars($tide['type']) ?> à <?= htmlspecialchars($tide['time']) ?>
-                <span class="top-sep">·</span> coeff <?= $tide['coeff'] ?>
             </span>
             <span class="top-bar-item">
                 <span class="top-emoji">☀️</span>
-                <strong><?= $weather['temp'] ?>°C</strong> · vent <?= htmlspecialchars($weather['wind_dir']) ?> <?= $weather['wind_speed'] ?> nœuds
+                <strong><?= htmlspecialchars((string)$weather['temp']) ?>°C</strong> · vent <?= htmlspecialchars($weather['wind_dir']) ?> <?= htmlspecialchars((string)$weather['wind_speed']) ?> nœuds
             </span>
             <span class="top-bar-item top-bar-location">
-                📍 Arcachon · La Teste · Pyla · Cap Ferret
+                📍 Bassin d'Arcachon
             </span>
         </div>
-        <span class="top-bar-date"><?= date('l j F Y', strtotime('today')) ?></span>
+        <span class="top-bar-date"><?= htmlspecialchars(date_fr_long()) ?></span>
     </div>
 </div>
 

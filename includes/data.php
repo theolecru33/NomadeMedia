@@ -31,13 +31,13 @@ $events = [
         'price_full' => 'De 12€ à 35€ · Gratuit -18 ans',
         'image' => 'https://images.pexels.com/photos/19362300/pexels-photo-19362300.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop',
         'description' => 'Festival international de musique classique dans les plus beaux lieux du bassin. Un mois de concerts d\'exception au cœur du patrimoine arcachonnais.',
-        'long_description' => 'Pendant un mois, les plus grandes salles et lieux patrimoniaux du Bassin s\'ouvrent aux orchestres venus du monde entier. Concerts en plein air, récitals intimistes, surprises symphoniques — un programme exigeant et accessible, avec la gratuité totale pour les moins de 18 ans.',
+        'long_description' => 'Pendant un mois, les plus grandes salles et lieux patrimoniaux du Bassin s\'ouvrent aux orchestres venus du monde entier. Concerts en plein air, récitals intimistes, surprises symphoniques. Un programme exigeant et accessible, avec la gratuité totale pour les moins de 18 ans.',
         'url' => 'https://www.lesescapadesmusicales.com/',
         'highlight' => true,
     ],
     [
         'id' => 'suzane-velodrome',
-        'title' => 'Suzane — Arcachon en Scène',
+        'title' => 'Suzane · Arcachon en Scène',
         'date' => '2026-08-03',
         'date_label' => '3 août 2026',
         'time' => '21h00',
@@ -55,7 +55,7 @@ $events = [
     ],
     [
         'id' => 'mika-velodrome',
-        'title' => 'Mika — Arcachon en Scène',
+        'title' => 'Mika · Arcachon en Scène',
         'date' => '2026-08-04',
         'date_label' => '4 août 2026',
         'time' => '21h00',
@@ -123,7 +123,7 @@ $events = [
         'price_full' => '29€ - 49€ selon parcours',
         'image' => 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1200&auto=format&fit=crop',
         'description' => 'La course à obstacles XXL qui transforme la plage d\'Arcachon en terrain de jeu géant. Ambiance garantie.',
-        'long_description' => 'La Frappadingue débarque sur la plage d\'Arcachon : parcours de 6, 12 ou 18 km, obstacles XXL, boue, rires et déguisements. Pas besoin d\'être un champion — l\'ambiance fait tout.',
+        'long_description' => 'La Frappadingue débarque sur la plage d\'Arcachon : parcours de 6, 12 ou 18 km, obstacles XXL, boue, rires et déguisements. Pas besoin d\'être un champion, l\'ambiance fait tout.',
         'url' => '#',
         'highlight' => true,
     ],
@@ -555,18 +555,142 @@ function strftime_fr($month_num) {
     return $months[(int)$month_num] ?? '';
 }
 
-// Fake but plausible tide/weather data for the top bar.
-function get_tide_info() {
-    $hour = (int)date('G');
-    $tides = [
-        ['dir' => 'montante',   'type' => 'pleine mer', 'time' => '09h42'],
-        ['dir' => 'descendante', 'type' => 'basse mer',  'time' => '16h07'],
-        ['dir' => 'montante',   'type' => 'pleine mer', 'time' => '22h18'],
-    ];
-    $idx = $hour < 12 ? 0 : ($hour < 18 ? 1 : 2);
-    return array_merge($tides[$idx], ['coeff' => 77]);
+/**
+ * Cache utilitaire — stocke un tableau JSON en /tmp pour TTL secondes.
+ */
+function _cache_fetch($key, $ttl, callable $fetcher) {
+    $file = sys_get_temp_dir() . '/nomade_' . preg_replace('/[^a-z0-9_]/i', '', $key) . '.json';
+    if (is_file($file) && (time() - filemtime($file)) < $ttl) {
+        $data = json_decode(@file_get_contents($file), true);
+        if (is_array($data)) return $data;
+    }
+    try {
+        $data = $fetcher();
+        if (is_array($data)) @file_put_contents($file, json_encode($data));
+        return $data;
+    } catch (\Throwable $e) {
+        if (is_file($file)) {
+            $stale = json_decode(@file_get_contents($file), true);
+            if (is_array($stale)) return $stale;
+        }
+        return null;
+    }
 }
 
+/**
+ * Fetch distant robuste : essaie HTTPS via cURL si dispo, sinon HTTP (pour les envs sans openssl).
+ */
+function _http_get($url, $timeout = 4) {
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => $timeout,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => 'Nomade Media',
+        ]);
+        $raw = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($raw !== false && $code >= 200 && $code < 300) return $raw;
+    }
+    $ctx = stream_context_create(['http' => ['timeout' => $timeout, 'header' => "User-Agent: Nomade\r\n"]]);
+    $raw = @file_get_contents($url, false, $ctx);
+    if ($raw !== false) return $raw;
+    // Fallback : bascule en HTTP si HTTPS n'est pas dispo (envs sans openssl)
+    if (strpos($url, 'https://') === 0) {
+        $httpUrl = 'http://' . substr($url, 8);
+        $raw = @file_get_contents($httpUrl, false, $ctx);
+        if ($raw !== false) return $raw;
+    }
+    return null;
+}
+
+/**
+ * Récupère la marée réelle via Open-Meteo Marine (sea_level_height_msl) sur Arcachon.
+ * Détecte la prochaine pleine/basse mer + le sens actuel (montante/descendante).
+ */
+function get_tide_info() {
+    $default = ['dir' => 'montante', 'type' => 'pleine mer', 'time' => '—'];
+    $data = _cache_fetch('tide', 1800, function() {
+        $url = 'https://marine-api.open-meteo.com/v1/marine?latitude=44.6630&longitude=-1.1683&hourly=sea_level_height_msl&timezone=Europe%2FParis&forecast_days=2';
+        $raw = _http_get($url);
+        if ($raw === null) return null;
+        $j = json_decode($raw, true);
+        if (!isset($j['hourly']['time'], $j['hourly']['sea_level_height_msl'])) return null;
+        return ['t' => $j['hourly']['time'], 'h' => $j['hourly']['sea_level_height_msl']];
+    });
+    if (!$data) return $default;
+
+    $times = $data['t']; $levels = $data['h'];
+    $nowTs = time();
+    // Index courant (dernière heure passée)
+    $curIdx = 0;
+    foreach ($times as $i => $t) {
+        $ts = strtotime($t);
+        if ($ts !== false && $ts <= $nowTs) $curIdx = $i;
+    }
+    $curLvl = $levels[$curIdx] ?? null;
+    $nextLvl = $levels[$curIdx + 1] ?? $curLvl;
+    $dir = ($nextLvl !== null && $curLvl !== null && $nextLvl > $curLvl) ? 'montante' : 'descendante';
+
+    // Prochain extremum (peak ou trough)
+    $target = null; $targetIdx = null;
+    for ($i = $curIdx + 1; $i < count($levels) - 1; $i++) {
+        $prev = $levels[$i - 1] ?? null;
+        $cur  = $levels[$i] ?? null;
+        $next = $levels[$i + 1] ?? null;
+        if ($prev === null || $cur === null || $next === null) continue;
+        if (($cur >= $prev && $cur >= $next) || ($cur <= $prev && $cur <= $next)) {
+            $target = ($cur >= $prev) ? 'pleine mer' : 'basse mer';
+            $targetIdx = $i;
+            break;
+        }
+    }
+    if ($targetIdx === null) return $default;
+    $t = strtotime($times[$targetIdx]);
+    return [
+        'dir'  => $dir,
+        'type' => $target,
+        'time' => $t ? date('H\hi', $t) : '—',
+    ];
+}
+
+/**
+ * Récupère la météo réelle via Open-Meteo sur Arcachon.
+ */
 function get_weather_info() {
-    return ['temp' => 21, 'wind_dir' => 'SE', 'wind_speed' => 7];
+    $default = ['temp' => '—', 'wind_dir' => '', 'wind_speed' => '—'];
+    $data = _cache_fetch('weather', 900, function() {
+        $url = 'https://api.open-meteo.com/v1/forecast?latitude=44.6630&longitude=-1.1683&current=temperature_2m,wind_speed_10m,wind_direction_10m&wind_speed_unit=kn&timezone=Europe%2FParis';
+        $raw = _http_get($url);
+        if ($raw === null) return null;
+        $j = json_decode($raw, true);
+        if (!isset($j['current'])) return null;
+        return $j['current'];
+    });
+    if (!$data) return $default;
+    $degToCompass = function($deg) {
+        $dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+        return $dirs[(int)floor((((float)$deg) % 360) / 22.5 + 0.5) % 16];
+    };
+    return [
+        'temp' => isset($data['temperature_2m']) ? (int)round($data['temperature_2m']) : '—',
+        'wind_dir' => isset($data['wind_direction_10m']) ? $degToCompass($data['wind_direction_10m']) : '',
+        'wind_speed' => isset($data['wind_speed_10m']) ? (int)round($data['wind_speed_10m']) : '—',
+    ];
+}
+
+/**
+ * Formate la date du jour en français, ex. « jeudi 24 avril 2026 ».
+ */
+function date_fr_long($ts = null) {
+    $ts = $ts ?? time();
+    $jours = ['Sunday'=>'dimanche','Monday'=>'lundi','Tuesday'=>'mardi','Wednesday'=>'mercredi','Thursday'=>'jeudi','Friday'=>'vendredi','Saturday'=>'samedi'];
+    $mois  = [1=>'janvier',2=>'février',3=>'mars',4=>'avril',5=>'mai',6=>'juin',7=>'juillet',8=>'août',9=>'septembre',10=>'octobre',11=>'novembre',12=>'décembre'];
+    $j = $jours[date('l', $ts)] ?? '';
+    $d = (int) date('j', $ts);
+    $m = $mois[(int) date('n', $ts)] ?? '';
+    $y = date('Y', $ts);
+    return trim(ucfirst("$j $d $m $y"));
 }

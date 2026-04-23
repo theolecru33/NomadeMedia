@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Mentions légales — Nomade';
+$page_title = 'Mentions légales · Nomade';
 $page_desc = 'Mentions légales de Nomade Media.';
 $current_page = 'legal';
 include __DIR__ . '/includes/header.php';
@@ -14,7 +14,7 @@ include __DIR__ . '/includes/header.php';
 
 <article class="legal-content">
     <h2>Éditeur du site</h2>
-    <p><strong>Nomade Media</strong> — micro-entreprise basée à La Teste-de-Buch (33260).</p>
+    <p><strong>Nomade Media</strong>, micro-entreprise basée à La Teste-de-Buch (33260).</p>
     <p>Contact&nbsp;: <a href="mailto:contact@nomade-media.fr">contact@nomade-media.fr</a></p>
     <p>SIRET&nbsp;: à compléter</p>
     <p>Directeur de la publication&nbsp;: à compléter</p>

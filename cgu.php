@@ -1,5 +1,5 @@
 <?php
-$page_title = 'CGU — Nomade';
+$page_title = 'CGU · Nomade';
 $page_desc = 'Conditions générales d\'utilisation de Nomade Media.';
 $current_page = 'legal';
 include __DIR__ . '/includes/header.php';

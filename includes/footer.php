@@ -8,7 +8,7 @@
                     <span class="logo-mark">N</span>
                     <span>Nomade</span>
                 </a>
-                <p>Le média du Bassin d'Arcachon. Bons plans, événements, spots, soirées — on repère, tu profites.</p>
+                <p>Le média du Bassin d'Arcachon. Bons plans, événements, spots, soirées. On repère, tu profites.</p>
                 <div class="footer-social">
                     <a href="https://www.instagram.com/nomademediacom" target="_blank" rel="noopener" aria-label="Instagram">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="footer-bottom">
-            <span>© <?= date('Y') ?> Nomade Media — Fait avec ❤️ sur le Bassin d'Arcachon</span>
+            <span>© <?= date('Y') ?> Nomade Media · Fait avec ❤️ sur le Bassin d'Arcachon</span>
             <span>Propulsé par la communauté locale</span>
         </div>
     </div>

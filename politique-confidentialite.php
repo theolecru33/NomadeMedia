@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Politique de confidentialité — Nomade';
+$page_title = 'Politique de confidentialité · Nomade';
 $page_desc = 'Politique de confidentialité de Nomade Media.';
 $current_page = 'legal';
 include __DIR__ . '/includes/header.php';
@@ -21,7 +21,7 @@ include __DIR__ . '/includes/header.php';
 
     <h2>Cookies</h2>
     <p>Nous utilisons uniquement des cookies techniques strictement nécessaires au bon fonctionnement du site. Aucun cookie publicitaire ou de tracking tiers n'est déposé sans votre consentement.</p>
-    <p>Les contenus tiers intégrés (Spotify, Instagram) peuvent déposer leurs propres cookies — consultez leurs politiques respectives.</p>
+    <p>Les contenus tiers intégrés (Spotify, Instagram) peuvent déposer leurs propres cookies, consultez leurs politiques respectives.</p>
 
     <h2>Vos droits</h2>
     <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et d'opposition sur vos données. Pour exercer ces droits, écrivez-nous à <a href="mailto:contact@nomade-media.fr">contact@nomade-media.fr</a>.</p>

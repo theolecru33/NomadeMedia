@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/includes/data.php';
-$page_title = 'Communauté — Nomade';
+$page_title = 'Communauté · Nomade';
 $page_desc = 'Rejoins la communauté Nomade : groupes WhatsApp bons plans, sorties, food, surf du Bassin d\'Arcachon.';
 $current_page = 'communaute';
 include __DIR__ . '/includes/header.php';
