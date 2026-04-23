@@ -11,6 +11,11 @@ include __DIR__ . '/includes/header.php';
 <!-- HERO V2 : watercolor + handwritten -->
 <section class="hero hero-v2">
     <div class="hero-watercolor"></div>
+    <div class="hero-sun" aria-hidden="true"></div>
+    <svg class="hero-horizon" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 30 Q 180 12 360 30 T 720 30 T 1080 30 T 1440 30" stroke="#3E5C76" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M0 44 Q 180 28 360 44 T 720 44 T 1080 44 T 1440 44" stroke="#8AA5C4" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
     <div class="container hero-v2-inner">
         <div class="hero-v2-text reveal">
             <span class="hero-badge">

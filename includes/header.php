@@ -42,7 +42,7 @@ $weather = get_weather_info();
     <div class="container top-bar-inner">
         <div class="top-bar-items">
             <span class="top-bar-item">
-                <span class="top-emoji">🌊</span>
+                <svg class="top-wave" width="28" height="10" viewBox="0 0 60 10" aria-hidden="true"><path d="M0 5 Q 7.5 0 15 5 T 30 5 T 45 5 T 60 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                 Marée <strong><?= htmlspecialchars($tide['dir']) ?></strong> · <?= htmlspecialchars($tide['type']) ?> à <?= htmlspecialchars($tide['time']) ?>
                 <span class="top-sep">·</span> coeff <?= $tide['coeff'] ?>
             </span>
