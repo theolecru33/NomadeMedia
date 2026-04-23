@@ -34,7 +34,7 @@ include __DIR__ . '/includes/header.php';
         </div>
         <div class="hero-visual reveal reveal-delay-1">
             <div class="hero-card hero-card-main">
-                <img src="https://images.unsplash.com/photo-1590167482431-0bf6fa7a8c02?w=900&auto=format&fit=crop" alt="Dune du Pilat">
+                <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=900&auto=format&fit=crop" alt="Dune du Pilat">
             </div>
             <div class="hero-card hero-card-tiny">
                 <span class="big-emoji">🌅</span>
@@ -114,7 +114,10 @@ include __DIR__ . '/includes/header.php';
 
         <div class="spot-grid" data-spot-grid>
             <?php
-            $preview_spots = array_slice($spots, 0, 8);
+            $preview_spots = [];
+            foreach (['resto','bar','plage','activite'] as $cat) {
+                $preview_spots = array_merge($preview_spots, array_slice(get_spots_by_category($spots, $cat), 0, 2));
+            }
             foreach ($preview_spots as $i => $sp): ?>
             <article class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>">
                 <div class="spot-media">
@@ -161,7 +164,7 @@ include __DIR__ . '/includes/header.php';
             </a>
         </div>
         <div class="insta-grid reveal reveal-delay-2">
-            <div class="insta-grid-item"><img src="https://images.unsplash.com/photo-1590167482431-0bf6fa7a8c02?w=400&auto=format&fit=crop" alt=""></div>
+            <div class="insta-grid-item"><img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=400&auto=format&fit=crop" alt=""></div>
             <div class="insta-grid-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&auto=format&fit=crop" alt=""></div>
             <div class="insta-grid-item"><img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop" alt=""></div>
             <div class="insta-grid-item"><img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&auto=format&fit=crop" alt=""></div>
