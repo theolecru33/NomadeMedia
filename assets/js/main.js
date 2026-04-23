@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Header scroll state
     const header = document.getElementById('siteHeader');
     const onScroll = () => {
-        if (!header) return;
         if (window.scrollY > 24) header.classList.add('scrolled');
         else header.classList.remove('scrolled');
     };
@@ -37,57 +36,61 @@ document.addEventListener('DOMContentLoaded', () => {
         revealEls.forEach(el => io.observe(el));
     }
 
-    // Spot filter pills
-    const spotFilter = document.querySelector('[data-spot-filter]');
+    // Spot category tabs
+    const tabs = document.querySelectorAll('.category-tab[data-category]');
     const spotGrid = document.querySelector('[data-spot-grid]');
-    if (spotFilter && spotGrid) {
-        const pills = spotFilter.querySelectorAll('.pill');
-        const filterSpots = (cat) => {
-            pills.forEach(p => p.classList.toggle('active', p.dataset.category === cat));
-            const cards = spotGrid.querySelectorAll('[data-spot-category]');
-            let visible = 0;
-            cards.forEach(card => {
-                const match = cat === 'all' || card.dataset.spotCategory === cat;
-                card.style.display = match ? '' : 'none';
-                if (match) visible++;
+    if (tabs.length && spotGrid) {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const cat = tab.dataset.category;
+                tabs.forEach(t => t.classList.toggle('active', t === tab));
+                const cards = spotGrid.querySelectorAll('[data-spot-category]');
+                let visible = 0;
+                cards.forEach(card => {
+                    const match = cat === 'all' || card.dataset.spotCategory === cat;
+                    card.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+                const empty = spotGrid.querySelector('.spot-empty');
+                if (empty) empty.style.display = visible === 0 ? '' : 'none';
             });
-            const empty = spotGrid.querySelector('.spot-empty');
-            if (empty) empty.style.display = visible === 0 ? '' : 'none';
-        };
-        pills.forEach(pill => pill.addEventListener('click', () => filterSpots(pill.dataset.category)));
+        });
 
         const urlCat = new URLSearchParams(window.location.search).get('cat');
-        if (urlCat && spotFilter.querySelector(`.pill[data-category="${urlCat}"]`)) {
-            filterSpots(urlCat);
+        if (urlCat) {
+            const preset = document.querySelector(`.category-tab[data-category="${urlCat}"]`);
+            if (preset) preset.click();
         }
     }
 
-    // Event filter pills
-    const eventFilter = document.querySelector('[data-event-filter]');
+    // Event category tabs
+    const eventTabs = document.querySelectorAll('.category-tab[data-event-category]');
     const eventGrid = document.querySelector('[data-event-grid]');
-    if (eventFilter && eventGrid) {
-        const pills = eventFilter.querySelectorAll('.pill');
-        const filterEvents = (cat) => {
-            pills.forEach(p => p.classList.toggle('active', p.dataset.eventCategory === cat));
-            const cards = eventGrid.querySelectorAll('[data-event-category]');
-            let visible = 0;
-            cards.forEach(card => {
-                const match = cat === 'all' || card.dataset.eventCategory === cat;
-                card.style.display = match ? '' : 'none';
-                if (match) visible++;
+    if (eventTabs.length && eventGrid) {
+        eventTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const cat = tab.dataset.eventCategory;
+                eventTabs.forEach(t => t.classList.toggle('active', t === tab));
+                const cards = eventGrid.querySelectorAll('[data-event-category]');
+                let visible = 0;
+                cards.forEach(card => {
+                    const match = cat === 'all' || card.dataset.eventCategory === cat;
+                    card.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+                const empty = eventGrid.querySelector('.event-empty');
+                if (empty) empty.style.display = visible === 0 ? '' : 'none';
             });
-            const empty = eventGrid.querySelector('.event-empty');
-            if (empty) empty.style.display = visible === 0 ? '' : 'none';
-        };
-        pills.forEach(pill => pill.addEventListener('click', () => filterEvents(pill.dataset.eventCategory)));
+        });
 
         const urlCat = new URLSearchParams(window.location.search).get('cat');
-        if (urlCat && eventFilter.querySelector(`.pill[data-event-category="${urlCat}"]`)) {
-            filterEvents(urlCat);
+        if (urlCat) {
+            const preset = document.querySelector(`.category-tab[data-event-category="${urlCat}"]`);
+            if (preset) preset.click();
         }
     }
 
-    // Subtle hover lift on polaroids (hover-capable devices only)
+    // Subtle parallax on polaroid grid
     const polaroids = document.querySelectorAll('.polaroid');
     if (polaroids.length && window.matchMedia('(hover: hover)').matches) {
         polaroids.forEach(p => {

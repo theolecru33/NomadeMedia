@@ -1,194 +1,173 @@
 <?php
 require __DIR__ . '/includes/data.php';
-$page_title = 'Nomade — Le Bassin, sans filtre';
-$page_desc = 'Bons plans du week-end, événements, spots secrets du Bassin d\'Arcachon. Les nomades repèrent, tu profites.';
+$page_title = 'Nomade — Le média du Bassin d\'Arcachon';
+$page_desc = 'Bons plans du week-end, événements, spots triés par catégorie. Le média qui fait vibrer le Bassin d\'Arcachon.';
 $current_page = 'accueil';
 $weekend = get_weekend_events($events, 4);
 $sponsored = get_sponsored_spots($spots);
-
-// Homepage spots: curated mosaic picks (1 big + 4 others, one per category + 1 sponsor)
-$mosaic_picks = [];
-$mosaic_picks[] = get_spots_by_category($spots, 'plage')[0] ?? null;       // big
-$mosaic_picks[] = get_spots_by_category($spots, 'resto')[0] ?? null;
-$mosaic_picks[] = get_spots_by_category($spots, 'activite')[0] ?? null;
-$mosaic_picks[] = get_spots_by_category($spots, 'resto')[1] ?? null;       // big
-$mosaic_picks[] = get_spots_by_category($spots, 'activite')[2] ?? null;   // tall
-$mosaic_picks[] = get_spots_by_category($spots, 'bar')[0] ?? null;
-$mosaic_picks[] = get_spots_by_category($spots, 'plage')[1] ?? null;
-$mosaic_picks = array_values(array_filter($mosaic_picks));
-
-$tape_styles = [
-    'top:-10px; left:50%; transform:translateX(-50%) rotate(-3deg);',
-    'top:-10px; right:12px; transform: rotate(6deg);',
-    'top:-10px; left:14px; transform: rotate(-8deg);',
-    'top:-10px; left:50%; transform: translateX(-50%) rotate(4deg);',
-];
-$tape_classes = ['tape', 'tape tape-blue', 'tape', 'tape tape-blue'];
-$rotations = ['rot-1', 'rot-2', 'rot-3', 'rot-4'];
-
 include __DIR__ . '/includes/header.php';
 ?>
 
-<!-- HERO -->
-<header class="hero">
-    <div class="hero-bg"></div>
-    <svg class="hero-horizon" viewBox="0 0 1440 60" preserveAspectRatio="none">
-        <path d="M0 30 Q 180 12 360 30 T 720 30 T 1080 30 T 1440 30" stroke="#3E5C76" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-        <path d="M0 44 Q 180 28 360 44 T 720 44 T 1080 44 T 1440 44" stroke="#8AA5C4" stroke-width="1" fill="none" stroke-linecap="round"/>
-    </svg>
-    <div class="hero-sun"></div>
-
-    <div class="container hero-inner">
-        <span class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            <span class="hero-badge-text">Été 2026 · Bassin d'Arcachon</span>
-        </span>
-
-        <h1 class="hero-title">
-            <span class="tag-line">Le Bassin,</span>
-            <span class="hl" style="color:var(--lagoon);">sans filtre<svg viewBox="0 0 240 14" preserveAspectRatio="none"><path d="M2 9 C 50 2, 120 14, 238 5"/></svg></span><span>.</span>
-        </h1>
-
-        <p class="hero-desc">
-            Bons plans, soirées, spots secrets.<br>
-            Les nomades repèrent, tu profites. Chaque semaine.
-        </p>
-
-        <div class="hero-actions">
-            <a href="#sortir" class="btn btn-coral">
-                Ce week-end
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-            </a>
-            <a href="#spots" class="btn btn-paper">Voir les bons spots</a>
+<!-- HERO V2 : watercolor + handwritten -->
+<section class="hero hero-v2">
+    <div class="hero-watercolor"></div>
+    <div class="container hero-v2-inner">
+        <div class="hero-v2-text reveal">
+            <span class="hero-badge">
+                <span class="hero-badge-dot">☀️</span>
+                ÉTÉ 2026 · BASSIN D'ARCACHON
+            </span>
+            <h1 class="hero-hand-title">
+                <span class="line-top">Le</span>
+                <span class="line-main">Bassin,</span>
+                <span class="line-sub">sans <span class="brush-word">filtre<svg class="brush-underline" viewBox="0 0 280 22" preserveAspectRatio="none"><path d="M4 14 Q 70 2, 140 10 T 276 8" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round"/></svg></span>.</span>
+            </h1>
+            <p class="hero-v2-desc">
+                On repère les bons plans, les soirées, les spots secrets et les événements du Bassin. Toi, t'as plus qu'à venir et profiter.
+            </p>
+            <div class="hero-v2-actions">
+                <a href="#weekend" class="btn btn-sunset">
+                    Ce week-end sur le bassin
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="spots.php" class="btn btn-ghost">Voir les bons spots</a>
+            </div>
+        </div>
+        <div class="hero-v2-visual reveal reveal-delay-1">
+            <div class="postcard postcard-main">
+                <img src="https://images.pexels.com/photos/22735929/pexels-photo-22735929.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop" alt="Dune du Pilat">
+                <span class="postcard-tape"></span>
+            </div>
+            <div class="postcard postcard-alt">
+                <img src="https://images.pexels.com/photos/13492229/pexels-photo-13492229.jpeg?auto=compress&cs=tinysrgb&h=900&w=1200&fit=crop" alt="Cabanes tchanquées">
+                <span class="postcard-caption">Île aux Oiseaux</span>
+            </div>
+            <div class="postcard-sticker">
+                <span>📍</span>
+                <div>
+                    <strong>Bassin</strong>
+                    <span>d'Arcachon</span>
+                </div>
+            </div>
         </div>
     </div>
-</header>
+</section>
 
-<!-- OÙ SORTIR CE WEEK-END -->
-<section id="sortir" class="section">
+<!-- BONS PLANS DU WEEK-END (polaroids) -->
+<section class="section weekend-section" id="weekend">
     <div class="container">
-        <div class="section-head reveal">
-            <div class="section-head-left">
-                <div class="section-eyebrow">le programme hebdo</div>
-                <h2 class="section-title">Où sortir<br><span class="circle-hand">ce week-end</span> ?</h2>
-            </div>
-            <div class="section-right">
-                On trie, on teste, on recommande. Les vrais plans du week-end, repérés par la team Nomade.
-            </div>
+        <div class="weekend-head reveal">
+            <span class="label">Les bons plans</span>
+            <h2>Où sortir <span class="scribble-circle">ce week-end<svg viewBox="0 0 300 60" preserveAspectRatio="none"><path d="M150 4 Q 290 6 288 30 T 150 56 Q 10 54 12 30 T 150 4" stroke="currentColor" stroke-width="3.4" fill="none" stroke-linecap="round"/></svg></span>&nbsp;?</h2>
+            <p>Les meilleures sorties repérées par la team. Clique, tu sauras tout.</p>
         </div>
-
         <div class="polaroid-grid">
             <?php foreach ($weekend as $i => $ev):
+                $d = new DateTime($ev['date']);
+                $day = $d->format('d');
+                $month = strtoupper(strftime_fr($d->format('n')));
                 $cat = $event_categories[$ev['category']] ?? null;
+                $rotations = ['-2.2deg','1.6deg','-1.1deg','2.4deg'];
                 $rot = $rotations[$i % 4];
-                $tape_cls = $tape_classes[$i % 4];
-                $tape_style = $tape_styles[$i % 4];
             ?>
-            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="polaroid <?= $rot ?> reveal reveal-delay-<?= ($i % 4) + 1 ?>">
-                <span class="<?= $tape_cls ?>" style="<?= $tape_style ?>"></span>
+            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="polaroid reveal reveal-delay-<?= ($i % 4) + 1 ?>" style="--rot: <?= $rot ?>;">
+                <span class="polaroid-tape"></span>
                 <div class="polaroid-photo">
                     <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
-                    <span class="polaroid-label"><?= htmlspecialchars($ev['location_tag']) ?></span>
-                    <?php if ($cat): ?><span class="polaroid-cat"><?= htmlspecialchars($cat['label']) ?></span><?php endif; ?>
+                    <span class="polaroid-location">📍 <?= htmlspecialchars($ev['location_tag']) ?></span>
+                    <?php if ($cat): ?>
+                    <span class="polaroid-cat" style="background: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                    <?php endif; ?>
                 </div>
-                <div class="polaroid-text">
-                    <span class="title"><?= htmlspecialchars($ev['title']) ?></span>
-                    <span class="meta"><?= htmlspecialchars($ev['location']) ?> · <?= htmlspecialchars($ev['date_label']) ?> · <?= htmlspecialchars($ev['time']) ?></span>
+                <div class="polaroid-caption">
+                    <div class="polaroid-date">
+                        <strong><?= $day ?></strong>
+                        <span><?= $month ?></span>
+                    </div>
+                    <div class="polaroid-text">
+                        <strong><?= htmlspecialchars($ev['title']) ?></strong>
+                        <span><?= htmlspecialchars($ev['time']) ?> · <?= htmlspecialchars($ev['price']) ?></span>
+                    </div>
                 </div>
             </a>
             <?php endforeach; ?>
         </div>
-
-        <div style="display:flex; justify-content:flex-end; margin-top:20px;" class="reveal">
-            <a href="evenements.php" class="font-hand" style="font-size:1.4rem; color:var(--lagoon-ink); display:inline-flex; align-items:center; gap:8px;">
-                Tous les plans du week-end
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div style="text-align:center; margin-top:60px;" class="reveal">
+            <a href="evenements.php" class="btn btn-secondary">
+                Voir tous les événements
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>
     </div>
 </section>
 
-<!-- PLAYLIST -->
-<section class="section" style="padding: 30px 0 50px;">
+<!-- SPOTS PAR CATÉGORIE -->
+<section class="section spots-section">
     <div class="container">
-        <div class="playlist-wrap reveal">
-            <span class="tape" style="top:-12px; left:28px; transform:rotate(-4deg);"></span>
-            <div class="vinyl">
-                <div class="vinyl-core"></div>
-            </div>
-            <div class="playlist-text">
-                <div class="eyebrow">la playlist nomade</div>
-                <h2>Le son du Bassin.</h2>
-                <div class="note">MAJ chaque vendredi · 1h04 d'ondes marines</div>
-            </div>
-            <div class="playlist-embed">
-                <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DWSpF87bP6JSF?utm_source=generator&theme=0" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- LES BONS SPOTS -->
-<section id="spots" class="section" style="background: linear-gradient(180deg, transparent, rgba(232, 220, 196, 0.5), transparent);">
-    <div class="container">
-        <div class="section-head reveal">
-            <div class="section-head-left">
-                <div class="section-eyebrow">les coups de cœur</div>
-                <h2 class="section-title">Les bons spots.</h2>
-            </div>
-            <div class="pills-row" data-spot-filter>
-                <button class="pill active" data-category="all">Tout</button>
-                <button class="pill" data-category="plage"><span class="emoji">🏖️</span> Plages</button>
-                <button class="pill" data-category="resto"><span class="emoji">🍽️</span> Restos</button>
-                <button class="pill" data-category="bar"><span class="emoji">🍹</span> Bars</button>
-                <button class="pill" data-category="activite"><span class="emoji">🪂</span> Activités</button>
-            </div>
+        <div class="section-head center reveal">
+            <span class="label">Les spots</span>
+            <h2>Nos adresses favorites</h2>
+            <p>Triées par envie du moment. On teste, on recommande, on te file le bon plan.</p>
         </div>
 
-        <div class="mosaic" data-spot-grid>
+        <div class="category-tabs reveal">
+            <button class="category-tab active" data-category="all"><span class="emoji">✨</span> Tout</button>
+            <button class="category-tab" data-category="resto"><span class="emoji">🍽️</span> Restos</button>
+            <button class="category-tab" data-category="bar"><span class="emoji">🍹</span> Bars</button>
+            <button class="category-tab" data-category="plage"><span class="emoji">🏖️</span> Plages</button>
+            <button class="category-tab" data-category="activite"><span class="emoji">🪂</span> Activités</button>
+        </div>
+
+        <div class="spot-grid" data-spot-grid>
             <?php
-            $span_map = [
-                0 => 'col-2 row-2',
-                1 => '',
-                2 => '',
-                3 => 'col-2 row-2',
-                4 => 'row-2',
-                5 => '',
-                6 => 'col-2',
-            ];
-            foreach ($mosaic_picks as $i => $sp):
-                $spans = $span_map[$i] ?? '';
-            ?>
-            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="tile <?= $spans ?> reveal" data-spot-category="<?= htmlspecialchars($sp['category']) ?>">
-                <div class="tile-cover" style="background-image:url('<?= htmlspecialchars($sp['image']) ?>');"></div>
-                <div class="tile-veil"></div>
-                <span class="tile-cat"><?= htmlspecialchars($sp['category_label']) ?></span>
-                <?php if (!empty($sp['sponsored'])): ?><span class="tile-sponsor">★ Sponso</span><?php endif; ?>
-                <h4 class="tile-title"><?= htmlspecialchars($sp['name']) ?></h4>
-                <span class="tile-price"><?= htmlspecialchars($sp['price_level']) ?></span>
+            $preview_spots = [];
+            foreach (['resto','bar','plage','activite'] as $cat) {
+                $preview_spots = array_merge($preview_spots, array_slice(get_spots_by_category($spots, $cat), 0, 2));
+            }
+            foreach ($preview_spots as $i => $sp): ?>
+            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>">
+                <div class="spot-media">
+                    <img src="<?= htmlspecialchars($sp['image']) ?>" alt="<?= htmlspecialchars($sp['name']) ?>" loading="lazy">
+                    <span class="spot-tag"><?= htmlspecialchars($sp['category_label']) ?></span>
+                    <span class="spot-price"><?= htmlspecialchars($sp['price_level']) ?></span>
+                    <?php if (!empty($sp['sponsored'])): ?><span class="spot-sponsor-badge">★ Sponso</span><?php endif; ?>
+                    <div class="spot-title-overlay">
+                        <strong><?= htmlspecialchars($sp['name']) ?></strong>
+                        <span>📍 <?= htmlspecialchars($sp['location']) ?></span>
+                    </div>
+                </div>
+                <div class="spot-body">
+                    <div class="spot-tags">
+                        <?php foreach (array_slice($sp['tags'], 0, 3) as $t): ?>
+                            <span class="tag-pill"><?= htmlspecialchars($t) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                    <p><?= htmlspecialchars($sp['description']) ?></p>
+                </div>
             </a>
             <?php endforeach; ?>
+            <div class="spot-empty" style="display:none;">Aucun spot dans cette catégorie pour le moment.</div>
         </div>
 
-        <div style="display:flex; justify-content:center; margin-top: 40px;" class="reveal">
-            <a href="spots.php" class="btn btn-lagoon">
+        <div style="text-align:center; margin-top:48px;" class="reveal">
+            <a href="spots.php" class="btn btn-primary">
                 Tous les spots du bassin
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>
     </div>
 </section>
 
-<!-- INSTAGRAM -->
+<!-- INSTAGRAM STRIP (stats retirées) -->
 <section class="insta-strip">
-    <div class="container insta-inner">
+    <div class="container insta-strip-inner">
         <div class="reveal">
-            <span class="eyebrow"><span class="dot"></span> @nomademediacom</span>
-            <h2>Le meilleur <span class="highlight">média</span> du bassin vit sur Insta.</h2>
+            <span class="eyebrow" style="background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.2); color:white;"><span class="dot"></span> @nomademediacom</span>
+            <h2 style="margin-top:18px;">Le meilleur <span class="highlight">média</span> du bassin vit sur Insta.</h2>
             <p>Paysages, bons plans, soirées, annonces d'événements : on y poste chaque jour. Viens voir.</p>
             <a href="https://www.instagram.com/nomademediacom" target="_blank" rel="noopener" class="insta-cta">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-                Suivre sur Instagram
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                Suivre Nomade sur Instagram
             </a>
         </div>
         <div class="insta-grid reveal reveal-delay-2">
@@ -202,17 +181,20 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- CTA COMMUNITY -->
-<section class="section">
-    <div class="container">
-        <div class="cta-card reveal">
-            <span class="tape" style="top:-12px; left:50%; transform:translateX(-50%) rotate(-2deg);"></span>
-            <div class="eyebrow">la team nomade</div>
-            <h2>Rejoins la <span class="circle-hand">communauté</span>.</h2>
-            <p>Des groupes WhatsApp thématiques pour partager bons plans, sorties et tips entre habitants et amoureux du Bassin.</p>
-            <div style="margin-top: 24px;">
-                <a href="communaute.php" class="btn btn-coral">Voir les groupes</a>
-            </div>
+<!-- PLAYLIST SPOTIFY -->
+<section class="section playlist-section">
+    <div class="container playlist-inner">
+        <div class="playlist-text reveal">
+            <span class="eyebrow"><span class="dot"></span> Playlist maison</span>
+            <h2 style="margin-top:14px;">Le <span class="hand">son</span> du bassin.</h2>
+            <p>Une playlist pour la route vers le Cap Ferret, pour le sunset au Pilat, pour le afterwork au Moulleau. Mets-la à fond et fenêtre ouverte.</p>
+            <a href="https://open.spotify.com/" target="_blank" rel="noopener" class="btn btn-sunset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.56.3z"/></svg>
+                Ouvrir sur Spotify
+            </a>
+        </div>
+        <div class="playlist-embed reveal reveal-delay-1">
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DWSpF87bP6JSF?utm_source=generator&theme=0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
     </div>
 </section>
