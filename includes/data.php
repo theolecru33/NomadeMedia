@@ -70,6 +70,7 @@ $events = [
         'long_description' => 'Mika pose ses valises au Vélodrome pour une nuit unique sur le bassin. Les tubes, le live band, la fête. Un concert à ne pas rater.',
         'url' => '#',
         'highlight' => true,
+        'sponsored' => true,
     ],
     [
         'id' => 'fetes-de-la-mer',
@@ -181,6 +182,7 @@ $events = [
         'long_description' => 'Rendez-vous au Domaine du Ferret pour un DJ set sunset face au bassin. Deux artistes locaux aux platines, cocktails signature et vue carte postale.',
         'url' => '#',
         'highlight' => true,
+        'sponsored' => true,
     ],
     [
         'id' => 'soiree-white-garden',
@@ -534,6 +536,19 @@ function get_spots_by_category($spots, $category) {
 
 function get_sponsored_spots($spots) {
     return array_values(array_filter($spots, fn($s) => !empty($s['sponsored'])));
+}
+
+function get_sponsored_events($events) {
+    return array_values(array_filter($events, fn($e) => !empty($e['sponsored'])));
+}
+
+/**
+ * Met les items sponsorisés au début du tableau, en conservant l'ordre relatif des autres.
+ */
+function sort_sponsored_first($items) {
+    $sponsored = array_values(array_filter($items, fn($it) => !empty($it['sponsored'])));
+    $rest      = array_values(array_filter($items, fn($it) => empty($it['sponsored'])));
+    return array_merge($sponsored, $rest);
 }
 
 function get_events_by_category($events, $category) {

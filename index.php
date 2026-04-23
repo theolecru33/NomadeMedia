@@ -61,7 +61,12 @@ include __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- BONS PLANS DU WEEK-END (polaroids) -->
+<!-- BONS PLANS DU WEEK-END (magazine hero + mini) -->
+<?php
+$weekend = sort_sponsored_first($weekend);
+$hero_ev = $weekend[0] ?? null;
+$mini_evs = array_slice($weekend, 1);
+?>
 <section class="section weekend-section" id="weekend">
     <div class="container">
         <div class="weekend-head reveal">
@@ -69,40 +74,75 @@ include __DIR__ . '/includes/header.php';
             <h2>Où sortir <span class="scribble-circle">ce week-end<svg viewBox="0 0 300 60" preserveAspectRatio="none"><path d="M150 4 Q 290 6 288 30 T 150 56 Q 10 54 12 30 T 150 4" stroke="currentColor" stroke-width="3.4" fill="none" stroke-linecap="round"/></svg></span>&nbsp;?</h2>
             <p>Les meilleures sorties repérées par la team. Clique, tu sauras tout.</p>
         </div>
-        <div class="polaroid-grid" data-count="<?= $weekend_count ?>">
-            <?php foreach ($weekend as $i => $ev):
-                $d = new DateTime($ev['date']);
-                $day = $d->format('d');
-                $month = strtoupper(strftime_fr($d->format('n')));
-                $cat = $event_categories[$ev['category']] ?? null;
-                $rotations = ['-3.2deg','2.4deg','-1.6deg','3.1deg','-2.4deg','1.2deg','-0.8deg','2.8deg'];
-                $rot = $rotations[$i % 8];
-                $offsets = [0, 18, -12, 22, -6, 14, -20, 10];
-                $offset = $offsets[$i % 8];
-                $feature = ($weekend_count >= 3 && $i === 0);
-            ?>
-            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="polaroid reveal reveal-delay-<?= ($i % 4) + 1 ?><?= $feature ? ' polaroid-feature' : '' ?>" style="--rot: <?= $rot ?>; --offset: <?= $offset ?>px;">
-                <span class="polaroid-tape"></span>
-                <div class="polaroid-photo">
-                    <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
-                    <span class="polaroid-location">📍 <?= htmlspecialchars($ev['location_tag']) ?></span>
-                    <?php if ($cat): ?>
-                    <span class="polaroid-cat" style="background: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+
+        <?php if ($hero_ev):
+            $d = new DateTime($hero_ev['date']);
+            $day = $d->format('d');
+            $month = strtoupper(strftime_fr($d->format('n')));
+            $cat = $event_categories[$hero_ev['category']] ?? null;
+        ?>
+        <div class="weekend-layout" data-count="<?= $weekend_count ?>">
+            <a href="event.php?id=<?= urlencode($hero_ev['id']) ?>" class="weekend-hero reveal<?= !empty($hero_ev['sponsored']) ? ' is-sponsored' : '' ?>" style="background-image:url('<?= htmlspecialchars($hero_ev['image']) ?>');">
+                <div class="weekend-hero-scrim"></div>
+                <div class="weekend-hero-top">
+                    <?php if (!empty($hero_ev['sponsored'])): ?>
+                        <span class="sponsor-chip">★ Partenaire</span>
                     <?php endif; ?>
+                    <span class="weekend-hero-flag">
+                        <span>À la une</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </span>
                 </div>
-                <div class="polaroid-caption">
-                    <div class="polaroid-date">
-                        <strong><?= $day ?></strong>
-                        <span><?= $month ?></span>
-                    </div>
-                    <div class="polaroid-text">
-                        <strong><?= htmlspecialchars($ev['title']) ?></strong>
-                        <span><?= htmlspecialchars($ev['time']) ?> · <?= htmlspecialchars($ev['price']) ?></span>
+                <div class="weekend-hero-date">
+                    <span class="wh-day"><?= $day ?></span>
+                    <span class="wh-month"><?= $month ?></span>
+                </div>
+                <div class="weekend-hero-bottom">
+                    <?php if ($cat): ?>
+                        <span class="weekend-hero-cat" style="--cat-color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                    <?php endif; ?>
+                    <h3><?= htmlspecialchars($hero_ev['title']) ?></h3>
+                    <div class="weekend-hero-meta">
+                        <span>📍 <?= htmlspecialchars($hero_ev['location_tag']) ?></span>
+                        <span>🕘 <?= htmlspecialchars($hero_ev['time']) ?></span>
+                        <span>💸 <?= htmlspecialchars($hero_ev['price']) ?></span>
                     </div>
                 </div>
             </a>
-            <?php endforeach; ?>
+
+            <?php if (!empty($mini_evs)): ?>
+            <div class="weekend-list">
+                <?php foreach ($mini_evs as $i => $ev):
+                    $d = new DateTime($ev['date']);
+                    $day = $d->format('d');
+                    $month = strtoupper(strftime_fr($d->format('n')));
+                    $cat = $event_categories[$ev['category']] ?? null;
+                ?>
+                <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="weekend-mini reveal reveal-delay-<?= ($i % 4) + 1 ?><?= !empty($ev['sponsored']) ? ' is-sponsored' : '' ?>">
+                    <div class="wm-media">
+                        <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
+                        <?php if (!empty($ev['sponsored'])): ?><span class="sponsor-chip">★</span><?php endif; ?>
+                    </div>
+                    <div class="wm-body">
+                        <div class="wm-date">
+                            <strong><?= $day ?></strong>
+                            <span><?= $month ?></span>
+                        </div>
+                        <div class="wm-text">
+                            <?php if ($cat): ?>
+                                <span class="wm-cat" style="color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                            <?php endif; ?>
+                            <h4><?= htmlspecialchars($ev['title']) ?></h4>
+                            <span class="wm-meta">📍 <?= htmlspecialchars($ev['location_tag']) ?> · <?= htmlspecialchars($ev['time']) ?></span>
+                        </div>
+                        <svg class="wm-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -129,25 +169,26 @@ include __DIR__ . '/includes/header.php';
             foreach (['resto','bar','plage','activite'] as $cat) {
                 $preview_spots = array_merge($preview_spots, array_slice(get_spots_by_category($spots, $cat), 0, 2));
             }
+            $preview_spots = sort_sponsored_first($preview_spots);
             foreach ($preview_spots as $i => $sp): ?>
-            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>">
-                <div class="spot-media">
-                    <img src="<?= htmlspecialchars($sp['image']) ?>" alt="<?= htmlspecialchars($sp['name']) ?>" loading="lazy">
-                    <span class="spot-tag"><?= htmlspecialchars($sp['category_label']) ?></span>
-                    <span class="spot-price"><?= htmlspecialchars($sp['price_level']) ?></span>
-                    <?php if (!empty($sp['sponsored'])): ?><span class="spot-sponsor-badge">★ Sponso</span><?php endif; ?>
-                    <div class="spot-title-overlay">
-                        <strong><?= htmlspecialchars($sp['name']) ?></strong>
-                        <span>📍 <?= htmlspecialchars($sp['location']) ?></span>
-                    </div>
+            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?><?= !empty($sp['sponsored']) ? ' is-sponsored' : '' ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>" style="background-image:url('<?= htmlspecialchars($sp['image']) ?>');">
+                <div class="spot-scrim"></div>
+                <?php if (!empty($sp['sponsored'])): ?>
+                <span class="sponsor-chip spot-sponso-chip">★ Partenaire Nomade</span>
+                <?php endif; ?>
+                <div class="spot-top">
+                    <span class="spot-chip spot-chip-cat"><?= htmlspecialchars($sp['category_label']) ?></span>
+                    <span class="spot-chip spot-chip-price"><?= htmlspecialchars($sp['price_level']) ?></span>
                 </div>
-                <div class="spot-body">
-                    <div class="spot-tags">
+                <div class="spot-bottom">
+                    <span class="spot-location">📍 <?= htmlspecialchars($sp['location']) ?></span>
+                    <h3 class="spot-name"><?= htmlspecialchars($sp['name']) ?></h3>
+                    <p class="spot-desc"><?= htmlspecialchars($sp['description']) ?></p>
+                    <div class="spot-tag-row">
                         <?php foreach (array_slice($sp['tags'], 0, 3) as $t): ?>
-                            <span class="tag-pill"><?= htmlspecialchars($t) ?></span>
+                            <span class="tag-pill light"><?= htmlspecialchars($t) ?></span>
                         <?php endforeach; ?>
                     </div>
-                    <p><?= htmlspecialchars($sp['description']) ?></p>
                 </div>
             </a>
             <?php endforeach; ?>
@@ -164,7 +205,7 @@ include __DIR__ . '/includes/header.php';
 </section>
 
 <!-- AGENDA : prochains événements -->
-<?php if (!empty($upcoming)): ?>
+<?php $upcoming = sort_sponsored_first($upcoming); if (!empty($upcoming)): ?>
 <section class="section events-preview-section">
     <div class="container">
         <div class="section-head center reveal">
@@ -179,21 +220,24 @@ include __DIR__ . '/includes/header.php';
                 $month = strtoupper(strftime_fr($d->format('n')));
                 $cat = $event_categories[$ev['category']] ?? null;
             ?>
-            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-preview-card reveal reveal-delay-<?= ($i % 4) + 1 ?>">
-                <div class="event-preview-media">
-                    <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
-                    <div class="event-preview-date">
-                        <strong><?= $day ?></strong>
-                        <span><?= $month ?></span>
-                    </div>
-                    <?php if ($cat): ?>
-                    <span class="event-cat-pill" style="background: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
-                    <?php endif; ?>
+            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-card-v2 reveal reveal-delay-<?= ($i % 4) + 1 ?><?= !empty($ev['sponsored']) ? ' is-sponsored' : '' ?>" style="background-image:url('<?= htmlspecialchars($ev['image']) ?>');">
+                <div class="ev2-scrim"></div>
+                <?php if (!empty($ev['sponsored'])): ?>
+                <span class="sponsor-chip ev2-sponso">★ Partenaire</span>
+                <?php endif; ?>
+                <div class="ev2-date">
+                    <span class="ev2-day"><?= $day ?></span>
+                    <span class="ev2-month"><?= $month ?></span>
                 </div>
-                <div class="event-preview-body">
-                    <span class="event-preview-meta">📍 <?= htmlspecialchars($ev['location_tag']) ?> · <?= htmlspecialchars($ev['time']) ?></span>
+                <div class="ev2-bottom">
+                    <?php if ($cat): ?>
+                        <span class="ev2-cat" style="--cat-color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                    <?php endif; ?>
                     <h3><?= htmlspecialchars($ev['title']) ?></h3>
-                    <p><?= htmlspecialchars($ev['description']) ?></p>
+                    <div class="ev2-meta">
+                        <span>📍 <?= htmlspecialchars($ev['location_tag']) ?></span>
+                        <span>🕘 <?= htmlspecialchars($ev['time']) ?></span>
+                    </div>
                 </div>
             </a>
             <?php endforeach; ?>

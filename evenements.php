@@ -4,6 +4,7 @@ $page_title = 'Événements · Nomade';
 $page_desc = 'Tous les événements du Bassin d\'Arcachon : concerts, festivals, soirées, traditions. L\'agenda de l\'été et au-delà.';
 $current_page = 'evenements';
 usort($events, fn($a, $b) => strcmp($a['date'], $b['date']));
+$events = sort_sponsored_first($events);
 include __DIR__ . '/includes/header.php';
 ?>
 
@@ -36,28 +37,24 @@ include __DIR__ . '/includes/header.php';
                 $month = strtoupper(strftime_fr($d->format('n')));
                 $cat = $event_categories[$ev['category']] ?? null;
             ?>
-            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-card reveal reveal-delay-<?= ($i % 3) + 1 ?>" data-event-category="<?= htmlspecialchars($ev['category']) ?>">
-                <div class="event-media">
-                    <img src="<?= htmlspecialchars($ev['image']) ?>" alt="<?= htmlspecialchars($ev['title']) ?>" loading="lazy">
-                    <div class="event-date-badge">
-                        <strong><?= $day ?></strong>
-                        <span><?= $month ?></span>
-                    </div>
-                    <span class="event-tag"><?= htmlspecialchars($ev['price']) ?></span>
-                    <?php if ($cat): ?>
-                    <span class="event-cat-pill" style="background: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
-                    <?php endif; ?>
+            <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-card-v2 reveal reveal-delay-<?= ($i % 3) + 1 ?><?= !empty($ev['sponsored']) ? ' is-sponsored' : '' ?>" data-event-category="<?= htmlspecialchars($ev['category']) ?>" style="background-image:url('<?= htmlspecialchars($ev['image']) ?>');">
+                <div class="ev2-scrim"></div>
+                <?php if (!empty($ev['sponsored'])): ?>
+                <span class="sponsor-chip ev2-sponso">★ Partenaire</span>
+                <?php endif; ?>
+                <div class="ev2-date">
+                    <span class="ev2-day"><?= $day ?></span>
+                    <span class="ev2-month"><?= $month ?></span>
                 </div>
-                <div class="event-body">
-                    <div class="event-tags">
-                        <?php foreach (array_slice($ev['tags'] ?? [], 0, 3) as $t): ?>
-                            <span class="tag-pill"><?= htmlspecialchars($t) ?></span>
-                        <?php endforeach; ?>
-                    </div>
+                <span class="ev2-price"><?= htmlspecialchars($ev['price']) ?></span>
+                <div class="ev2-bottom">
+                    <?php if ($cat): ?>
+                        <span class="ev2-cat" style="--cat-color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                    <?php endif; ?>
                     <h3><?= htmlspecialchars($ev['title']) ?></h3>
-                    <p class="event-desc"><?= htmlspecialchars($ev['description']) ?></p>
-                    <div class="event-meta">
-                        <span>📍 <?= htmlspecialchars($ev['location']) ?></span>
+                    <p class="ev2-desc"><?= htmlspecialchars($ev['description']) ?></p>
+                    <div class="ev2-meta">
+                        <span>📍 <?= htmlspecialchars($ev['location_tag']) ?></span>
                         <span>📅 <?= htmlspecialchars($ev['date_label']) ?></span>
                     </div>
                 </div>

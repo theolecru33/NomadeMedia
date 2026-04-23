@@ -58,25 +58,25 @@ include __DIR__ . '/includes/header.php';
         </div>
 
         <div class="spot-grid" data-spot-grid>
-            <?php foreach ($spots as $i => $sp): ?>
-            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>">
-                <div class="spot-media">
-                    <img src="<?= htmlspecialchars($sp['image']) ?>" alt="<?= htmlspecialchars($sp['name']) ?>" loading="lazy">
-                    <span class="spot-tag"><?= htmlspecialchars($sp['category_label']) ?></span>
-                    <span class="spot-price"><?= htmlspecialchars($sp['price_level']) ?></span>
-                    <?php if (!empty($sp['sponsored'])): ?><span class="spot-sponsor-badge">★ Sponso</span><?php endif; ?>
-                    <div class="spot-title-overlay">
-                        <strong><?= htmlspecialchars($sp['name']) ?></strong>
-                        <span>📍 <?= htmlspecialchars($sp['location']) ?></span>
-                    </div>
+            <?php $spots_sorted = sort_sponsored_first($spots); foreach ($spots_sorted as $i => $sp): ?>
+            <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?><?= !empty($sp['sponsored']) ? ' is-sponsored' : '' ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>" style="background-image:url('<?= htmlspecialchars($sp['image']) ?>');">
+                <div class="spot-scrim"></div>
+                <?php if (!empty($sp['sponsored'])): ?>
+                <span class="sponsor-chip spot-sponso-chip">★ Partenaire Nomade</span>
+                <?php endif; ?>
+                <div class="spot-top">
+                    <span class="spot-chip spot-chip-cat"><?= htmlspecialchars($sp['category_label']) ?></span>
+                    <span class="spot-chip spot-chip-price"><?= htmlspecialchars($sp['price_level']) ?></span>
                 </div>
-                <div class="spot-body">
-                    <div class="spot-tags">
+                <div class="spot-bottom">
+                    <span class="spot-location">📍 <?= htmlspecialchars($sp['location']) ?></span>
+                    <h3 class="spot-name"><?= htmlspecialchars($sp['name']) ?></h3>
+                    <p class="spot-desc"><?= htmlspecialchars($sp['description']) ?></p>
+                    <div class="spot-tag-row">
                         <?php foreach (array_slice($sp['tags'], 0, 4) as $t): ?>
-                            <span class="tag-pill"><?= htmlspecialchars($t) ?></span>
+                            <span class="tag-pill light"><?= htmlspecialchars($t) ?></span>
                         <?php endforeach; ?>
                     </div>
-                    <p><?= htmlspecialchars($sp['description']) ?></p>
                 </div>
             </a>
             <?php endforeach; ?>
