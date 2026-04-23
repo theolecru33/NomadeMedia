@@ -39,18 +39,20 @@ include __DIR__ . '/includes/header.php';
             ?>
             <a href="event.php?id=<?= urlencode($ev['id']) ?>" class="event-card-v2 reveal reveal-delay-<?= ($i % 3) + 1 ?><?= !empty($ev['sponsored']) ? ' is-sponsored' : '' ?>" data-event-category="<?= htmlspecialchars($ev['category']) ?>" style="background-image:url('<?= htmlspecialchars($ev['image']) ?>');">
                 <div class="ev2-scrim"></div>
-                <?php if (!empty($ev['sponsored'])): ?>
-                <span class="sponsor-chip ev2-sponso">★ Partenaire</span>
-                <?php endif; ?>
                 <div class="ev2-date">
                     <span class="ev2-day"><?= $day ?></span>
                     <span class="ev2-month"><?= $month ?></span>
                 </div>
                 <span class="ev2-price"><?= htmlspecialchars($ev['price']) ?></span>
                 <div class="ev2-bottom">
-                    <?php if ($cat): ?>
-                        <span class="ev2-cat" style="--cat-color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
-                    <?php endif; ?>
+                    <div class="ev2-tags-row">
+                        <?php if ($cat): ?>
+                            <span class="ev2-cat" style="--cat-color: <?= $cat['color'] ?>;"><?= $cat['emoji'] ?> <?= htmlspecialchars($cat['label']) ?></span>
+                        <?php endif; ?>
+                        <?php if (!empty($ev['sponsored'])): ?>
+                            <span class="sponsor-chip">★ Partenaire</span>
+                        <?php endif; ?>
+                    </div>
                     <h3><?= htmlspecialchars($ev['title']) ?></h3>
                     <p class="ev2-desc"><?= htmlspecialchars($ev['description']) ?></p>
                     <div class="ev2-meta">

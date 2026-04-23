@@ -56,9 +56,6 @@ include __DIR__ . '/includes/header.php';
                 </div>
                 <div class="dhv2-media">
                     <div class="dhv2-photo" style="background-image:url('<?= htmlspecialchars($sp['image']) ?>');">
-                        <?php if (!empty($sp['sponsored'])): ?>
-                        <span class="dhv2-sponsor-ribbon">★ Partenaire</span>
-                        <?php endif; ?>
                         <span class="dhv2-price-stamp"><?= htmlspecialchars($sp['price_level']) ?></span>
                     </div>
                 </div>
@@ -105,15 +102,17 @@ include __DIR__ . '/includes/header.php';
             <?php foreach ($related as $i => $rsp): ?>
             <a href="spot.php?id=<?= urlencode($rsp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 3) + 1 ?><?= !empty($rsp['sponsored']) ? ' is-sponsored' : '' ?>" style="background-image:url('<?= htmlspecialchars($rsp['image']) ?>');">
                 <div class="spot-scrim"></div>
-                <?php if (!empty($rsp['sponsored'])): ?>
-                <span class="sponsor-chip spot-sponso-chip">★ Partenaire Nomade</span>
-                <?php endif; ?>
                 <div class="spot-top">
                     <span class="spot-chip spot-chip-cat"><?= htmlspecialchars($rsp['category_label']) ?></span>
                     <span class="spot-chip spot-chip-price"><?= htmlspecialchars($rsp['price_level']) ?></span>
                 </div>
                 <div class="spot-bottom">
-                    <span class="spot-location">📍 <?= htmlspecialchars($rsp['location']) ?></span>
+                    <div class="spot-tags-row">
+                        <span class="spot-location">📍 <?= htmlspecialchars($rsp['location']) ?></span>
+                        <?php if (!empty($rsp['sponsored'])): ?>
+                            <span class="sponsor-chip">★ Partenaire</span>
+                        <?php endif; ?>
+                    </div>
                     <h3 class="spot-name"><?= htmlspecialchars($rsp['name']) ?></h3>
                     <p class="spot-desc"><?= htmlspecialchars($rsp['description']) ?></p>
                     <div class="spot-tag-row">

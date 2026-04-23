@@ -61,15 +61,17 @@ include __DIR__ . '/includes/header.php';
             <?php $spots_sorted = sort_sponsored_first($spots); foreach ($spots_sorted as $i => $sp): ?>
             <a href="spot.php?id=<?= urlencode($sp['id']) ?>" class="spot-card reveal reveal-delay-<?= ($i % 4) + 1 ?><?= !empty($sp['sponsored']) ? ' is-sponsored' : '' ?>" data-spot-category="<?= htmlspecialchars($sp['category']) ?>" style="background-image:url('<?= htmlspecialchars($sp['image']) ?>');">
                 <div class="spot-scrim"></div>
-                <?php if (!empty($sp['sponsored'])): ?>
-                <span class="sponsor-chip spot-sponso-chip">★ Partenaire Nomade</span>
-                <?php endif; ?>
                 <div class="spot-top">
                     <span class="spot-chip spot-chip-cat"><?= htmlspecialchars($sp['category_label']) ?></span>
                     <span class="spot-chip spot-chip-price"><?= htmlspecialchars($sp['price_level']) ?></span>
                 </div>
                 <div class="spot-bottom">
-                    <span class="spot-location">📍 <?= htmlspecialchars($sp['location']) ?></span>
+                    <div class="spot-tags-row">
+                        <span class="spot-location">📍 <?= htmlspecialchars($sp['location']) ?></span>
+                        <?php if (!empty($sp['sponsored'])): ?>
+                            <span class="sponsor-chip">★ Partenaire</span>
+                        <?php endif; ?>
+                    </div>
                     <h3 class="spot-name"><?= htmlspecialchars($sp['name']) ?></h3>
                     <p class="spot-desc"><?= htmlspecialchars($sp['description']) ?></p>
                     <div class="spot-tag-row">
