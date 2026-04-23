@@ -1103,7 +1103,15 @@ h3 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
     align-items: center;
 }
 .dhv2-text { max-width: 560px; }
-.dhv2-tags-top { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.dhv2-tags-top { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; align-items: center; }
+.dhv2-tags-top .event-cat-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 50px;
+    color: white; font-weight: 600; font-size: 0.82rem;
+    letter-spacing: 0.02em; line-height: 1;
+    box-shadow: 0 6px 14px rgba(31,36,46,0.12);
+}
+.dhv2-tags-top .sponsor-chip { font-size: 0.72rem; padding: 8px 14px; }
 .dhv2-title {
     font-family: var(--font-display); font-weight: 600;
     font-size: clamp(2.6rem, 5.2vw, 4.8rem); line-height: 1.02;
@@ -1195,6 +1203,13 @@ h3 { font-size: clamp(1.3rem, 2vw, 1.6rem); }
 .dbv2-main .detail-tags { margin-top: 28px; }
 
 .dbv2-aside { position: sticky; top: 120px; align-self: start; }
+
+/* Related grid: taille fixe peu importe le nombre de cartes */
+.detail-page .event-grid,
+.detail-page .spot-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 360px));
+    justify-content: start;
+}
 .dbv2-card {
     background: white;
     border: 1px solid rgba(139,160,200,0.22);
